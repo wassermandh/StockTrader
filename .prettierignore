@@ -1,4 +1,5 @@
+node_modules
 public/bundle.js
 public/bundle.js.map
-package-lock.json
-package.json
+secrets.js
+npm-debug.log
