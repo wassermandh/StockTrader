@@ -399,6 +399,7 @@ function (_Component) {
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Quantity", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "number",
         name: "quantity",
+        min: "0",
         onChange: this.handleChange,
         required: true
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -726,7 +727,7 @@ var buyingStock = function buyingStock(stock, quantity) {
       var _ref = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee(dispatch) {
-        var _ref2, data;
+        var _ref2, data, createdStock;
 
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -740,26 +741,42 @@ var buyingStock = function buyingStock(stock, quantity) {
                 _ref2 = _context.sent;
                 data = _ref2.data;
 
-                if (data['Error Message']) {
-                  dispatch(incorrectTicker());
-                } else {
-                  dispatch(buyStock(stock, quantity));
+                if (!data['Error Message']) {
+                  _context.next = 9;
+                  break;
                 }
 
-                _context.next = 11;
+                dispatch(incorrectTicker());
+                _context.next = 14;
                 break;
 
-              case 8:
-                _context.prev = 8;
+              case 9:
+                console.log('hiIIII');
+                _context.next = 12;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/stocks/', {
+                  data: data,
+                  quantity: quantity
+                });
+
+              case 12:
+                createdStock = _context.sent;
+                dispatch(buyStock(stock, quantity));
+
+              case 14:
+                _context.next = 19;
+                break;
+
+              case 16:
+                _context.prev = 16;
                 _context.t0 = _context["catch"](0);
                 console.error(_context.t0);
 
-              case 11:
+              case 19:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 8]]);
+        }, _callee, null, [[0, 16]]);
       }));
 
       return function (_x) {
@@ -818,6 +835,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var GET_USER = 'GET_USER';
 var REMOVE_USER = 'REMOVE_USER';
+var UPDATE_BALANCE = 'UPDATE_BALANCE';
 var defaultUser = {}; //action creators
 
 var getUser = function getUser(user) {

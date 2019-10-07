@@ -9,15 +9,15 @@ const User = db.define('user', {
     allowNull: false,
   },
   balance: {
-    type: Sequelize.INTEGER,
-    defaultValue: 500000,
+    type: Sequelize.FLOAT,
+    defaultValue: 5000,
     validate: {
       min: 0,
     },
-    get() {
-      const balance = this.getDataValue('balance');
-      return balance / 100;
-    },
+    // get() {
+    //   const balance = this.getDataValue('balance');
+    //   return balance / 100;
+    // },
   },
   password: {
     type: Sequelize.STRING,

@@ -40,6 +40,7 @@ class StockPurchaseForm extends Component {
           <input
             type="number"
             name="quantity"
+            min="0"
             onChange={this.handleChange}
             required
           />

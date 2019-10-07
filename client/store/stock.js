@@ -31,6 +31,8 @@ export const buyingStock = (stock, quantity) => async dispatch => {
     if (data['Error Message']) {
       dispatch(incorrectTicker());
     } else {
+      console.log('hiIIII');
+      const createdStock = await axios.post('/api/stocks/', { data, quantity });
       dispatch(buyStock(stock, quantity));
     }
   } catch (err) {

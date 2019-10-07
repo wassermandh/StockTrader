@@ -7,12 +7,13 @@ const Stock = db.define('stock', {
     allowNull: false,
   },
   priceAtPurchase: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.DECIMAL,
     allowNull: false,
   },
   quantity: {
     type: Sequelize.INTEGER,
     allowNull: false,
+    defaultValue: 0,
   },
 });
 
