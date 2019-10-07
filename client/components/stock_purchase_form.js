@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { buyingStock } from '../store';
+import { connect } from 'react-redux';
 
 class StockPurchaseForm extends Component {
   constructor(props) {
@@ -17,18 +19,30 @@ class StockPurchaseForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    this.props.buyStock(this.state.ticker, this.state.quantity);
   }
 
   render() {
+    console.log(this.state);
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
           Stonk Ticker:
-          <input type="text" name="ticker" />
+          <input
+            type="text"
+            name="ticker"
+            onChange={this.handleChange}
+            required
+          />
         </label>
         <label>
           Quantity
-          <input type="number" name="ticker" />
+          <input
+            type="number"
+            name="quantity"
+            onChange={this.handleChange}
+            required
+          />
         </label>
         <input type="submit" value="Submit" />
       </form>
@@ -36,4 +50,12 @@ class StockPurchaseForm extends Component {
   }
 }
 
-export default StockPurchaseForm;
+const mapDispatchToProps = dispatch => {
+  return {
+    buyStock: (ticker, quantity) => {
+      dispatch(buyingStock(ticker, quantity));
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(StockPurchaseForm);

@@ -1,7 +1,10 @@
 const User = require('./user');
+const Stock = require('./stock');
 
-// assocations go here
+User.belongsToMany(Stock, { through: 'User_Stock' });
+Stock.belongsToMany(User, { through: 'User_Stock' });
 
 module.exports = {
   User,
+  Stock,
 };
