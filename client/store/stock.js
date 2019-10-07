@@ -3,6 +3,7 @@ import history from '../history';
 
 const BUY_STOCK = 'BUY_STOCK';
 const INCORRECT_TICKER = 'INCORRECT_TICKER';
+const BALANCE_TOO_LOW = 'BALANCE_TOO_LOW';
 
 const defaultStocks = { stocks: [], error: '' };
 
@@ -17,6 +18,12 @@ const buyStock = stock => {
 const incorrectTicker = () => {
   return {
     type: INCORRECT_TICKER,
+  };
+};
+
+const balanceTooLow = () => {
+  return {
+    type: BALANCE_TOO_LOW,
   };
 };
 
@@ -47,7 +54,9 @@ export const buyingStock = (stock, quantity) => async dispatch => {
       dispatch(buyStock(createdStock.data));
     }
   } catch (err) {
-    console.error(err);
+    if (err.message === 'Request failed with status code 501') {
+      dispatch(balanceTooLow());
+    }
   }
 };
 
@@ -61,6 +70,8 @@ export default function(state = defaultStocks, action) {
       };
     case INCORRECT_TICKER:
       return { ...state, error: 'Ticket is incorrect' };
+    case BALANCE_TOO_LOW:
+      return { ...state, error: 'Your balance is too low to purchase this' };
     default:
       return state;
   }

@@ -699,6 +699,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var BUY_STOCK = 'BUY_STOCK';
 var INCORRECT_TICKER = 'INCORRECT_TICKER';
+var BALANCE_TOO_LOW = 'BALANCE_TOO_LOW';
 var defaultStocks = {
   stocks: [],
   error: ''
@@ -714,6 +715,12 @@ var buyStock = function buyStock(stock) {
 var incorrectTicker = function incorrectTicker() {
   return {
     type: INCORRECT_TICKER
+  };
+};
+
+var balanceTooLow = function balanceTooLow() {
+  return {
+    type: BALANCE_TOO_LOW
   };
 }; //thunks
 
@@ -776,7 +783,10 @@ var buyingStock = function buyingStock(stock, quantity) {
               case 12:
                 _context.prev = 12;
                 _context.t0 = _context["catch"](0);
-                console.error(_context.t0);
+
+                if (_context.t0.message === 'Request failed with status code 501') {
+                  dispatch(balanceTooLow());
+                }
 
               case 15:
               case "end":
@@ -807,6 +817,11 @@ var buyingStock = function buyingStock(stock, quantity) {
     case INCORRECT_TICKER:
       return _objectSpread({}, state, {
         error: 'Ticket is incorrect'
+      });
+
+    case BALANCE_TOO_LOW:
+      return _objectSpread({}, state, {
+        error: 'Your balance is too low to purchase this'
       });
 
     default:
@@ -44530,7 +44545,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, __RouterContext, generatePath, matchPath, useHistory, useLocation, useParams, useRouteMatch, withRouter, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, __RouterContext, generatePath, matchPath, useHistory, useLocation, useParams, useRouteMatch, withRouter */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
