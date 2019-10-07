@@ -371,7 +371,8 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(StockPurchaseForm).call(this, props));
     _this.state = {
       ticker: '',
-      quantity: ''
+      quantity: '',
+      error: _this.props.error
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
@@ -393,7 +394,7 @@ function (_Component) {
     key: "render",
     value: function render() {
       console.log(this.state);
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Stonk Ticker:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "text",
@@ -409,12 +410,18 @@ function (_Component) {
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "submit",
         value: "Submit"
-      }));
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.error.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, this.props.error) : ''));
     }
   }]);
 
   return StockPurchaseForm;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    error: state.stock.error
+  };
+};
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
@@ -424,7 +431,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(null, mapDispatchToProps)(StockPurchaseForm));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, mapDispatchToProps)(StockPurchaseForm));
 
 /***/ }),
 
@@ -837,68 +844,58 @@ var buyingStock = function buyingStock(stock, quantity) {
       var _ref = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee(dispatch) {
-        var data, createdStock;
+        var _ref2, data, createdStock;
+
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
-                // const { data } = await axios.get(
-                //   `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=
-                // );
-                data = {
-                  'Global Quote': {
-                    '01. symbol': 'MSFT',
-                    '02. open': '137.1400',
-                    '03. high': '138.1800',
-                    '04. low': '137.0200',
-                    '05. price': '137.1200',
-                    '06. volume': '12682685',
-                    '07. latest trading day': '2019-10-07',
-                    '08. previous close': '138.1200',
-                    '09. change': '-1.0000',
-                    '10. change percent': '-0.7240%'
-                  }
-                };
+                _context.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=".concat(stock, "&apikey=O1X1GO5YCEATSYLF"));
+
+              case 3:
+                _ref2 = _context.sent;
+                data = _ref2.data;
 
                 if (!data['Error Message']) {
-                  _context.next = 6;
+                  _context.next = 9;
                   break;
                 }
 
                 dispatch(incorrectTicker());
-                _context.next = 10;
+                _context.next = 13;
                 break;
 
-              case 6:
-                _context.next = 8;
+              case 9:
+                _context.next = 11;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/stocks/', {
                   data: data,
                   quantity: quantity
                 });
 
-              case 8:
+              case 11:
                 createdStock = _context.sent;
                 dispatch(buyStock(createdStock.data));
 
-              case 10:
-                _context.next = 15;
+              case 13:
+                _context.next = 18;
                 break;
 
-              case 12:
-                _context.prev = 12;
+              case 15:
+                _context.prev = 15;
                 _context.t0 = _context["catch"](0);
 
                 if (_context.t0.message === 'Request failed with status code 501') {
                   dispatch(balanceTooLow());
                 }
 
-              case 15:
+              case 18:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 12]]);
+        }, _callee, null, [[0, 15]]);
       }));
 
       return function (_x) {
@@ -911,10 +908,10 @@ var gettingTransactions = function gettingTransactions() {
   return (
     /*#__PURE__*/
     function () {
-      var _ref2 = _asyncToGenerator(
+      var _ref3 = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee2(dispatch) {
-        var _ref3, data;
+        var _ref4, data;
 
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
@@ -925,8 +922,8 @@ var gettingTransactions = function gettingTransactions() {
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('api/stocks/transactions');
 
               case 3:
-                _ref3 = _context2.sent;
-                data = _ref3.data;
+                _ref4 = _context2.sent;
+                data = _ref4.data;
                 dispatch(gotTransactions(data));
                 _context2.next = 11;
                 break;
@@ -945,7 +942,7 @@ var gettingTransactions = function gettingTransactions() {
       }));
 
       return function (_x2) {
-        return _ref2.apply(this, arguments);
+        return _ref3.apply(this, arguments);
       };
     }()
   );

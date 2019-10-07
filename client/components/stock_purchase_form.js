@@ -8,6 +8,7 @@ class StockPurchaseForm extends Component {
     this.state = {
       ticker: '',
       quantity: '',
+      error: this.props.error,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,31 +26,42 @@ class StockPurchaseForm extends Component {
   render() {
     console.log(this.state);
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Stonk Ticker:
-          <input
-            type="text"
-            name="ticker"
-            onChange={this.handleChange}
-            required
-          />
-        </label>
-        <label>
-          Quantity
-          <input
-            type="number"
-            name="quantity"
-            min="0"
-            onChange={this.handleChange}
-            required
-          />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+      <div>
+        <div>
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Stonk Ticker:
+              <input
+                type="text"
+                name="ticker"
+                onChange={this.handleChange}
+                required
+              />
+            </label>
+            <label>
+              Quantity
+              <input
+                type="number"
+                name="quantity"
+                min="0"
+                onChange={this.handleChange}
+                required
+              />
+            </label>
+            <input type="submit" value="Submit" />
+          </form>
+        </div>
+        <div>{this.props.error.length ? <p>{this.props.error}</p> : ''}</div>
+      </div>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    error: state.stock.error,
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -59,4 +71,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(StockPurchaseForm);
+export default connect(mapStateToProps, mapDispatchToProps)(StockPurchaseForm);
