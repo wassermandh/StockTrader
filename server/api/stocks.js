@@ -17,7 +17,7 @@ router.post('/', async (req, res, next) => {
     await req.user.setStocks(newStock);
     const newBalance = req.user.dataValues.balance - totalCost;
     await req.user.update({ balance: newBalance });
-    newStock.totalCost = totalCost;
+    newStock.dataValues.totalCost = totalCost;
     res.send(newStock);
   } catch (err) {
     next(err);

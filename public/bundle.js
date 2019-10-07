@@ -704,12 +704,10 @@ var defaultStocks = {
   error: ''
 }; //action creators
 
-var buyStock = function buyStock(stock, quantity) {
-  quantity = Number(quantity);
+var buyStock = function buyStock(stock) {
   return {
     type: BUY_STOCK,
-    stock: stock,
-    quantity: quantity
+    stock: stock
   };
 };
 
@@ -727,56 +725,65 @@ var buyingStock = function buyingStock(stock, quantity) {
       var _ref = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee(dispatch) {
-        var _ref2, data, createdStock;
-
+        var data, createdStock;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
-                _context.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=".concat(stock, "&apikey=O1X1GO5YCEATSYLF"));
-
-              case 3:
-                _ref2 = _context.sent;
-                data = _ref2.data;
+                // const { data } = await axios.get(
+                //   `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=
+                // );
+                data = {
+                  'Global Quote': {
+                    '01. symbol': 'MSFT',
+                    '02. open': '137.1400',
+                    '03. high': '138.1800',
+                    '04. low': '137.0200',
+                    '05. price': '137.1200',
+                    '06. volume': '12682685',
+                    '07. latest trading day': '2019-10-07',
+                    '08. previous close': '138.1200',
+                    '09. change': '-1.0000',
+                    '10. change percent': '-0.7240%'
+                  }
+                };
 
                 if (!data['Error Message']) {
-                  _context.next = 9;
+                  _context.next = 6;
                   break;
                 }
 
                 dispatch(incorrectTicker());
-                _context.next = 14;
+                _context.next = 10;
                 break;
 
-              case 9:
-                console.log('hiIIII');
-                _context.next = 12;
+              case 6:
+                _context.next = 8;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/stocks/', {
                   data: data,
                   quantity: quantity
                 });
 
-              case 12:
+              case 8:
                 createdStock = _context.sent;
-                dispatch(buyStock(stock, quantity));
+                dispatch(buyStock(createdStock.data));
 
-              case 14:
-                _context.next = 19;
+              case 10:
+                _context.next = 15;
                 break;
 
-              case 16:
-                _context.prev = 16;
+              case 12:
+                _context.prev = 12;
                 _context.t0 = _context["catch"](0);
                 console.error(_context.t0);
 
-              case 19:
+              case 15:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 16]]);
+        }, _callee, null, [[0, 12]]);
       }));
 
       return function (_x) {
@@ -793,10 +800,7 @@ var buyingStock = function buyingStock(stock, quantity) {
   switch (action.type) {
     case BUY_STOCK:
       return {
-        stocks: [].concat(_toConsumableArray(state.stocks), [{
-          stock: action.stock,
-          quantity: action.quantity
-        }]),
+        stocks: [].concat(_toConsumableArray(state.stocks), [action.stock]),
         error: ''
       };
 
@@ -44526,7 +44530,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, __RouterContext, generatePath, matchPath, useHistory, useLocation, useParams, useRouteMatch, withRouter */
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, __RouterContext, generatePath, matchPath, useHistory, useLocation, useParams, useRouteMatch, withRouter, BrowserRouter, HashRouter, Link, NavLink */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
