@@ -5,6 +5,7 @@ const BUY_STOCK = 'BUY_STOCK';
 const INCORRECT_TICKER = 'INCORRECT_TICKER';
 const BALANCE_TOO_LOW = 'BALANCE_TOO_LOW';
 const GOT_TRANSACTIONS = 'GOT_TRANSACTIONS';
+const TOO_MANY_API_CALLS = 'TOO_MANY_API_CALLS';
 
 const defaultStocks = { stocks: [], error: '' };
 
@@ -35,6 +36,12 @@ const gotTransactions = stocks => {
   };
 };
 
+const tooManyCalls = () => {
+  return {
+    type: TOO_MANY_API_CALLS,
+  };
+};
+
 //thunks
 export const buyingStock = (stock, quantity) => async dispatch => {
   try {
@@ -62,8 +69,11 @@ export const buyingStock = (stock, quantity) => async dispatch => {
       dispatch(buyStock(createdStock.data));
     }
   } catch (err) {
+    console.log(err);
     if (err.message === 'Request failed with status code 501') {
       dispatch(balanceTooLow());
+    } else if (err.message === 'Request failed with status code 502') {
+      dispatch(tooManyCalls());
     }
   }
 };
@@ -91,6 +101,8 @@ export default function(state = defaultStocks, action) {
       return { ...state, error: 'Your balance is too low to purchase this' };
     case GOT_TRANSACTIONS:
       return { ...state, stocks: action.stocks };
+    case TOO_MANY_API_CALLS:
+      return { ...state, error: 'The API has been throttled. Sorry!' };
     default:
       return state;
   }

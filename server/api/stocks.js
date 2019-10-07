@@ -14,6 +14,13 @@ router.get('/transactions', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
+    if (req.body.data.Note) {
+      if (req.body.data.Note.slice(0, 5) === 'Thank') {
+        let APICallErr = new Error();
+        APICallErr.status = 502;
+        throw APICallErr;
+      }
+    }
     const stock = req.body.data['Global Quote']['01. symbol'];
     const stockPrice = Number(req.body.data['Global Quote']['05. price']);
     const quantity = Number(req.body.quantity);

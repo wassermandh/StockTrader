@@ -805,6 +805,7 @@ var BUY_STOCK = 'BUY_STOCK';
 var INCORRECT_TICKER = 'INCORRECT_TICKER';
 var BALANCE_TOO_LOW = 'BALANCE_TOO_LOW';
 var GOT_TRANSACTIONS = 'GOT_TRANSACTIONS';
+var TOO_MANY_API_CALLS = 'TOO_MANY_API_CALLS';
 var defaultStocks = {
   stocks: [],
   error: ''
@@ -833,6 +834,12 @@ var gotTransactions = function gotTransactions(stocks) {
   return {
     type: GOT_TRANSACTIONS,
     stocks: stocks
+  };
+};
+
+var tooManyCalls = function tooManyCalls() {
+  return {
+    type: TOO_MANY_API_CALLS
   };
 }; //thunks
 
@@ -879,18 +886,21 @@ var buyingStock = function buyingStock(stock, quantity) {
                 dispatch(buyStock(createdStock.data));
 
               case 13:
-                _context.next = 18;
+                _context.next = 19;
                 break;
 
               case 15:
                 _context.prev = 15;
                 _context.t0 = _context["catch"](0);
+                console.log(_context.t0);
 
                 if (_context.t0.message === 'Request failed with status code 501') {
                   dispatch(balanceTooLow());
+                } else if (_context.t0.message === 'Request failed with status code 502') {
+                  dispatch(tooManyCalls());
                 }
 
-              case 18:
+              case 19:
               case "end":
                 return _context.stop();
             }
@@ -972,6 +982,11 @@ var gettingTransactions = function gettingTransactions() {
     case GOT_TRANSACTIONS:
       return _objectSpread({}, state, {
         stocks: action.stocks
+      });
+
+    case TOO_MANY_API_CALLS:
+      return _objectSpread({}, state, {
+        error: 'The API has been throttled. Sorry!'
       });
 
     default:
