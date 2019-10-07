@@ -202,7 +202,7 @@ AuthForm.propTypes = {
 /*!************************************!*\
   !*** ./client/components/index.js ***!
   \************************************/
-/*! exports provided: Navbar, UserHome, Login, Signup, Portfolio */
+/*! exports provided: Navbar, UserHome, Login, Signup, Portfolio, Transactions */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -220,6 +220,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _portfolio__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./portfolio */ "./client/components/portfolio.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Portfolio", function() { return _portfolio__WEBPACK_IMPORTED_MODULE_3__["default"]; });
+
+/* harmony import */ var _transaction__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./transaction */ "./client/components/transaction.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Transactions", function() { return _transaction__WEBPACK_IMPORTED_MODULE_4__["default"]; });
+
 
 
 
@@ -424,6 +428,93 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 /***/ }),
 
+/***/ "./client/components/transaction.js":
+/*!******************************************!*\
+  !*** ./client/components/transaction.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../store */ "./client/store/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
+var Transactions =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(Transactions, _Component);
+
+  function Transactions(props) {
+    _classCallCheck(this, Transactions);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(Transactions).call(this, props));
+  }
+
+  _createClass(Transactions, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.getTransactions();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Transactions")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.stocks.map(function (stock) {
+        console.log(stock);
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: stock.id
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "BUY (", stock.ticker, ") - ", stock.quantity, " shares @ $", stock.priceAtPurchase), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
+      })));
+    }
+  }]);
+
+  return Transactions;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    getTransactions: function getTransactions() {
+      dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_1__["gettingTransactions"])());
+    }
+  };
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    stocks: state.stock.stocks
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, mapDispatchToProps)(Transactions));
+
+/***/ }),
+
 /***/ "./client/components/user-home.js":
 /*!****************************************!*\
   !*** ./client/components/user-home.js ***!
@@ -585,6 +676,9 @@ function (_Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         path: "/portfolio",
         component: _components__WEBPACK_IMPORTED_MODULE_4__["Portfolio"]
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
+        path: "/transactions",
+        component: _components__WEBPACK_IMPORTED_MODULE_4__["Transactions"]
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         component: _components__WEBPACK_IMPORTED_MODULE_4__["Login"]
       }));
@@ -623,7 +717,7 @@ Routes.propTypes = {
 /*!*******************************!*\
   !*** ./client/store/index.js ***!
   \*******************************/
-/*! exports provided: default, me, auth, logout, buyingStock */
+/*! exports provided: default, me, auth, logout, buyingStock, gettingTransactions */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -643,6 +737,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "logout", function() { return _user__WEBPACK_IMPORTED_MODULE_4__["logout"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "buyingStock", function() { return _stock__WEBPACK_IMPORTED_MODULE_5__["buyingStock"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "gettingTransactions", function() { return _stock__WEBPACK_IMPORTED_MODULE_5__["gettingTransactions"]; });
 
 
 
@@ -668,12 +764,13 @@ var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, m
 /*!*******************************!*\
   !*** ./client/store/stock.js ***!
   \*******************************/
-/*! exports provided: buyingStock, default */
+/*! exports provided: buyingStock, gettingTransactions, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "buyingStock", function() { return buyingStock; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gettingTransactions", function() { return gettingTransactions; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _history__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../history */ "./client/history.js");
@@ -700,6 +797,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var BUY_STOCK = 'BUY_STOCK';
 var INCORRECT_TICKER = 'INCORRECT_TICKER';
 var BALANCE_TOO_LOW = 'BALANCE_TOO_LOW';
+var GOT_TRANSACTIONS = 'GOT_TRANSACTIONS';
 var defaultStocks = {
   stocks: [],
   error: ''
@@ -721,6 +819,13 @@ var incorrectTicker = function incorrectTicker() {
 var balanceTooLow = function balanceTooLow() {
   return {
     type: BALANCE_TOO_LOW
+  };
+};
+
+var gotTransactions = function gotTransactions(stocks) {
+  return {
+    type: GOT_TRANSACTIONS,
+    stocks: stocks
   };
 }; //thunks
 
@@ -801,6 +906,49 @@ var buyingStock = function buyingStock(stock, quantity) {
       };
     }()
   );
+};
+var gettingTransactions = function gettingTransactions() {
+  return (
+    /*#__PURE__*/
+    function () {
+      var _ref2 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee2(dispatch) {
+        var _ref3, data;
+
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('api/stocks/transactions');
+
+              case 3:
+                _ref3 = _context2.sent;
+                data = _ref3.data;
+                dispatch(gotTransactions(data));
+                _context2.next = 11;
+                break;
+
+              case 8:
+                _context2.prev = 8;
+                _context2.t0 = _context2["catch"](0);
+                console.log(_context2.t0);
+
+              case 11:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 8]]);
+      }));
+
+      return function (_x2) {
+        return _ref2.apply(this, arguments);
+      };
+    }()
+  );
 }; //reducer
 
 /* harmony default export */ __webpack_exports__["default"] = (function () {
@@ -822,6 +970,11 @@ var buyingStock = function buyingStock(stock, quantity) {
     case BALANCE_TOO_LOW:
       return _objectSpread({}, state, {
         error: 'Your balance is too low to purchase this'
+      });
+
+    case GOT_TRANSACTIONS:
+      return _objectSpread({}, state, {
+        stocks: action.stocks
       });
 
     default:
@@ -44545,7 +44698,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, __RouterContext, generatePath, matchPath, useHistory, useLocation, useParams, useRouteMatch, withRouter */
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, __RouterContext, generatePath, matchPath, useHistory, useLocation, useParams, useRouteMatch, withRouter, BrowserRouter, HashRouter, Link, NavLink */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

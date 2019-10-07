@@ -4,6 +4,7 @@ import history from '../history';
 const BUY_STOCK = 'BUY_STOCK';
 const INCORRECT_TICKER = 'INCORRECT_TICKER';
 const BALANCE_TOO_LOW = 'BALANCE_TOO_LOW';
+const GOT_TRANSACTIONS = 'GOT_TRANSACTIONS';
 
 const defaultStocks = { stocks: [], error: '' };
 
@@ -24,6 +25,13 @@ const incorrectTicker = () => {
 const balanceTooLow = () => {
   return {
     type: BALANCE_TOO_LOW,
+  };
+};
+
+const gotTransactions = stocks => {
+  return {
+    type: GOT_TRANSACTIONS,
+    stocks,
   };
 };
 
@@ -60,6 +68,15 @@ export const buyingStock = (stock, quantity) => async dispatch => {
   }
 };
 
+export const gettingTransactions = () => async dispatch => {
+  try {
+    const { data } = await axios.get('api/stocks/transactions');
+    dispatch(gotTransactions(data));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 //reducer
 export default function(state = defaultStocks, action) {
   switch (action.type) {
@@ -72,6 +89,8 @@ export default function(state = defaultStocks, action) {
       return { ...state, error: 'Ticket is incorrect' };
     case BALANCE_TOO_LOW:
       return { ...state, error: 'Your balance is too low to purchase this' };
+    case GOT_TRANSACTIONS:
+      return { ...state, stocks: action.stocks };
     default:
       return state;
   }

@@ -2,19 +2,22 @@ const router = require('express').Router();
 const { Stock } = require('../db/models');
 module.exports = router;
 
+router.get('/transactions', async (req, res, next) => {
+  try {
+    const allStocks = await req.user.getStocks();
+    console.log(allStocks);
+    res.send(allStocks);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post('/', async (req, res, next) => {
   try {
     const stock = req.body.data['Global Quote']['01. symbol'];
     const stockPrice = Number(req.body.data['Global Quote']['05. price']);
     const quantity = Number(req.body.quantity);
     const totalCost = stockPrice * quantity;
-
-    const newStock = await Stock.create({
-      ticker: stock,
-      priceAtPurchase: stockPrice,
-      quantity,
-    });
-    await req.user.setStocks(newStock);
     const newBalance = req.user.dataValues.balance - totalCost;
     if (newBalance < 0) {
       let balanceError = new Error();
@@ -23,6 +26,14 @@ router.post('/', async (req, res, next) => {
     } else {
       await req.user.update({ balance: newBalance });
     }
+
+    const newStock = await Stock.create({
+      ticker: stock,
+      priceAtPurchase: stockPrice,
+      quantity,
+    });
+    await req.user.addStock(newStock);
+
     newStock.dataValues.totalCost = totalCost;
     res.send(newStock);
   } catch (err) {
