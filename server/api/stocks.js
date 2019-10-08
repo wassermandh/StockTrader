@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { Stock } = require('../db/models');
 const axios = require('axios');
 module.exports = router;
+const alphavantageCall = require('../../secrets');
 
 router.get('/transactions', async (req, res, next) => {
   try {
@@ -30,7 +31,11 @@ router.get('/portfolio', async (req, res, next) => {
         };
       }
     });
-    console.log(uniqueStocks);
+
+    Object.keys(uniqueStocks).forEach(async stock => {
+      const { data } = await axios.get(alphavantageCall(stock));
+      console.log(data);
+    });
   } catch (err) {
     next(err);
   }
