@@ -357,11 +357,12 @@ function (_Component) {
     value: function render() {
       var _this = this;
 
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Portfolio"), Object.keys(this.props.portfolio).map(function (stock) {
+      console.log('PORTFOLIO', this.props.portfolio);
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Portfolio"), Object.keys(this.props.portfolio).length > 0 ? Object.keys(this.props.portfolio).map(function (stock) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: stock
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, stock, " - ", _this.props.portfolio[stock].quantity), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, _this.props.portfolio[stock].quantity * _this.props.portfolio[stock].latestPrice));
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Cash - ", this.props.user.balance), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_stock_purchase_form__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
+      }) : '', this.props.grabbingPortfolio ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Loading...") : '', this.props.loadingMoreStocks.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.props.loadingMoreStocks) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Cash - ", this.props.user.balance), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_stock_purchase_form__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
     }
   }]);
 
@@ -371,7 +372,9 @@ function (_Component) {
 var mapStateToProps = function mapStateToProps(state) {
   return {
     user: state.user,
-    portfolio: state.stock.portfolio
+    portfolio: state.stock.portfolio,
+    loadingMoreStocks: state.stock.loadingMoreStocks,
+    grabbingPortfolio: state.stock.grabbingPortfolio
   };
 };
 
@@ -857,12 +860,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _secrets__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_secrets__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var vm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vm */ "./node_modules/vm-browserify/index.js");
 /* harmony import */ var vm__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vm__WEBPACK_IMPORTED_MODULE_4__);
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -870,6 +867,12 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -884,20 +887,28 @@ var BUY_STOCK = 'BUY_STOCK';
 var INCORRECT_TICKER = 'INCORRECT_TICKER';
 var BALANCE_TOO_LOW = 'BALANCE_TOO_LOW';
 var GOT_TRANSACTIONS = 'GOT_TRANSACTIONS';
-var TOO_MANY_API_CALLS = 'TOO_MANY_API_CALLS';
 var GOT_PORTFOLIO = 'GOT_PORTFOLIO';
 var PORTFOLIO_API_THROTTLE = 'PORTFOLIO_API_THROTTLE';
+var TOO_MANY_CALLS = 'TOO_MANY_CALLS';
 var defaultStocks = {
   stocks: [],
   error: '',
   loadingMoreStocks: '',
-  portfolio: []
+  portfolio: {},
+  grabbingPortfolio: true,
+  uniqueStocks: 0
 }; //action creators
 
 var buyStock = function buyStock(stock) {
   return {
     type: BUY_STOCK,
     stock: stock
+  };
+};
+
+var tooManyCalls = function tooManyCalls() {
+  return {
+    type: TOO_MANY_CALLS
   };
 };
 
@@ -924,12 +935,6 @@ var gotTransactions = function gotTransactions(stocks) {
   return {
     type: GOT_TRANSACTIONS,
     stocks: stocks
-  };
-};
-
-var tooManyCalls = function tooManyCalls() {
-  return {
-    type: TOO_MANY_API_CALLS
   };
 };
 
@@ -1083,19 +1088,19 @@ var gettingPortfolio = function gettingPortfolio() {
                   break;
                 }
 
-                if (i % 5 === 0) {
-                  setTimeout(function () {
-                    dispatch(portfolioAPIThrottle());
-                  });
-                }
-
                 stock = tickers[i];
-                _context3.next = 12;
+                _context3.next = 11;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(_secrets__WEBPACK_IMPORTED_MODULE_3___default()(stock));
 
-              case 12:
+              case 11:
                 _ref7 = _context3.sent;
                 data = _ref7.data;
+
+                if (data.Note) {
+                  dispatch(portfolioAPIThrottle());
+                  setTimeout(function () {}, 60000);
+                }
+
                 ticker = data['Global Quote']['01. symbol'];
                 latestPrice = Number(data['Global Quote']['05. price']);
                 openPrice = Number(data['Global Quote']['02. open']);
@@ -1140,10 +1145,13 @@ var gettingPortfolio = function gettingPortfolio() {
 
   switch (action.type) {
     case BUY_STOCK:
-      return {
+      console.log(action.stock);
+      return _objectSpread({}, state, {
         stocks: [].concat(_toConsumableArray(state.stocks), [action.stock]),
-        error: ''
-      };
+        error: '',
+        loadingMoreStocks: '',
+        portfolioRefreshThrottle: ''
+      });
 
     case INCORRECT_TICKER:
       return _objectSpread({}, state, {
@@ -1160,21 +1168,22 @@ var gettingPortfolio = function gettingPortfolio() {
         stocks: action.stocks
       });
 
-    case TOO_MANY_API_CALLS:
-      return _objectSpread({}, state, {
-        error: 'The API has been throttled. Sorry!'
-      });
-
     case PORTFOLIO_API_THROTTLE:
       return _objectSpread({}, state, {
-        error: '',
-        loadingMoreStocks: 'Sorry, this API has limitations... every 5 unique stocks takes one additionam minute... please wait'
+        loadingMoreStocks: 'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and try again for updated information',
+        grabbingPortfolio: false
       });
 
     case GOT_PORTFOLIO:
       return _objectSpread({}, state, {
-        error: '',
-        portfolio: action.stocks
+        portfolio: action.stocks,
+        loadingMoreStocks: '',
+        grabbingPortfolio: false
+      });
+
+    case TOO_MANY_CALLS:
+      return _objectSpread({}, state, {
+        error: 'Too many calls have been made to the API. Please try again in one minute'
       });
 
     default:

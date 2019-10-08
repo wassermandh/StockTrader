@@ -8,15 +8,17 @@ const BUY_STOCK = 'BUY_STOCK';
 const INCORRECT_TICKER = 'INCORRECT_TICKER';
 const BALANCE_TOO_LOW = 'BALANCE_TOO_LOW';
 const GOT_TRANSACTIONS = 'GOT_TRANSACTIONS';
-const TOO_MANY_API_CALLS = 'TOO_MANY_API_CALLS';
 const GOT_PORTFOLIO = 'GOT_PORTFOLIO';
 const PORTFOLIO_API_THROTTLE = 'PORTFOLIO_API_THROTTLE';
+const TOO_MANY_CALLS = 'TOO_MANY_CALLS';
 
 const defaultStocks = {
   stocks: [],
   error: '',
   loadingMoreStocks: '',
-  portfolio: [],
+  portfolio: {},
+  grabbingPortfolio: true,
+  uniqueStocks: 0,
 };
 
 //action creators
@@ -24,6 +26,12 @@ const buyStock = stock => {
   return {
     type: BUY_STOCK,
     stock,
+  };
+};
+
+const tooManyCalls = () => {
+  return {
+    type: TOO_MANY_CALLS,
   };
 };
 
@@ -50,12 +58,6 @@ const gotTransactions = stocks => {
   return {
     type: GOT_TRANSACTIONS,
     stocks,
-  };
-};
-
-const tooManyCalls = () => {
-  return {
-    type: TOO_MANY_API_CALLS,
   };
 };
 
@@ -97,17 +99,16 @@ export const gettingTransactions = () => async dispatch => {
 
 export const gettingPortfolio = () => async dispatch => {
   try {
-    const { data: uniqueStocks } = await axios.get('/api/stocks/portfolio');
+    let { data: uniqueStocks } = await axios.get('/api/stocks/portfolio');
     const tickers = Object.keys(uniqueStocks);
 
     for (let i = 0; i < tickers.length; i++) {
-      if (i % 5 === 0) {
-        setTimeout(() => {
-          dispatch(portfolioAPIThrottle());
-        });
-      }
       let stock = tickers[i];
       const { data } = await axios.get(alphavantageCall(stock));
+      if (data.Note) {
+        dispatch(portfolioAPIThrottle());
+        setTimeout(() => {}, 60000);
+      }
       const ticker = data['Global Quote']['01. symbol'];
       const latestPrice = Number(data['Global Quote']['05. price']);
       const openPrice = Number(data['Global Quote']['02. open']);
@@ -126,9 +127,13 @@ export const gettingPortfolio = () => async dispatch => {
 export default function(state = defaultStocks, action) {
   switch (action.type) {
     case BUY_STOCK:
+      console.log(action.stock);
       return {
+        ...state,
         stocks: [...state.stocks, action.stock],
         error: '',
+        loadingMoreStocks: '',
+        portfolioRefreshThrottle: '',
       };
     case INCORRECT_TICKER:
       return { ...state, error: 'Ticket is incorrect' };
@@ -136,20 +141,25 @@ export default function(state = defaultStocks, action) {
       return { ...state, error: 'Your balance is too low to purchase this' };
     case GOT_TRANSACTIONS:
       return { ...state, stocks: action.stocks };
-    case TOO_MANY_API_CALLS:
-      return { ...state, error: 'The API has been throttled. Sorry!' };
     case PORTFOLIO_API_THROTTLE:
       return {
         ...state,
-        error: '',
         loadingMoreStocks:
-          'Sorry, this API has limitations... every 5 unique stocks takes one additionam minute... please wait',
+          'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and try again for updated information',
+        grabbingPortfolio: false,
       };
     case GOT_PORTFOLIO:
       return {
         ...state,
-        error: '',
         portfolio: action.stocks,
+        loadingMoreStocks: '',
+        grabbingPortfolio: false,
+      };
+    case TOO_MANY_CALLS:
+      return {
+        ...state,
+        error:
+          'Too many calls have been made to the API. Please try again in one minute',
       };
     default:
       return state;
