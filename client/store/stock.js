@@ -1,5 +1,6 @@
 import axios from 'axios';
 import history from '../history';
+import { updateBalance } from './index';
 
 const BUY_STOCK = 'BUY_STOCK';
 const INCORRECT_TICKER = 'INCORRECT_TICKER';
@@ -67,6 +68,7 @@ export const buyingStock = (stock, quantity) => async dispatch => {
     } else {
       const createdStock = await axios.post('/api/stocks/', { data, quantity });
       dispatch(buyStock(createdStock.data));
+      dispatch(updateBalance(createdStock.data.totalCost));
     }
   } catch (err) {
     console.log(err);

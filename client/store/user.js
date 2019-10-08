@@ -10,6 +10,12 @@ const defaultUser = {};
 //action creators
 const getUser = user => ({ type: GET_USER, user });
 const removeUser = () => ({ type: REMOVE_USER });
+export const updateBalance = totalCost => {
+  return {
+    type: UPDATE_BALANCE,
+    totalCost,
+  };
+};
 
 //thunks
 
@@ -55,6 +61,9 @@ export default function(state = defaultUser, action) {
       return action.user;
     case REMOVE_USER:
       return defaultUser;
+    case UPDATE_BALANCE:
+      let newBalance = state.balance - action.totalCost;
+      return { ...state, balance: newBalance };
     default:
       return state;
   }

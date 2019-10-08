@@ -724,7 +724,7 @@ Routes.propTypes = {
 /*!*******************************!*\
   !*** ./client/store/index.js ***!
   \*******************************/
-/*! exports provided: default, me, auth, logout, buyingStock, gettingTransactions */
+/*! exports provided: default, updateBalance, me, auth, logout, buyingStock, gettingTransactions */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -737,6 +737,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux_devtools_extension__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(redux_devtools_extension__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./user */ "./client/store/user.js");
 /* harmony import */ var _stock__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./stock */ "./client/store/stock.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "updateBalance", function() { return _user__WEBPACK_IMPORTED_MODULE_4__["updateBalance"]; });
+
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "me", function() { return _user__WEBPACK_IMPORTED_MODULE_4__["me"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "auth", function() { return _user__WEBPACK_IMPORTED_MODULE_4__["auth"]; });
@@ -781,6 +783,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _history__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../history */ "./client/history.js");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./index */ "./client/store/index.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -798,6 +801,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -871,7 +875,7 @@ var buyingStock = function buyingStock(stock, quantity) {
                 }
 
                 dispatch(incorrectTicker());
-                _context.next = 13;
+                _context.next = 14;
                 break;
 
               case 9:
@@ -884,13 +888,14 @@ var buyingStock = function buyingStock(stock, quantity) {
               case 11:
                 createdStock = _context.sent;
                 dispatch(buyStock(createdStock.data));
+                dispatch(Object(_index__WEBPACK_IMPORTED_MODULE_2__["updateBalance"])(createdStock.data.totalCost));
 
-              case 13:
-                _context.next = 19;
+              case 14:
+                _context.next = 20;
                 break;
 
-              case 15:
-                _context.prev = 15;
+              case 16:
+                _context.prev = 16;
                 _context.t0 = _context["catch"](0);
                 console.log(_context.t0);
 
@@ -900,12 +905,12 @@ var buyingStock = function buyingStock(stock, quantity) {
                   dispatch(tooManyCalls());
                 }
 
-              case 19:
+              case 20:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 15]]);
+        }, _callee, null, [[0, 16]]);
       }));
 
       return function (_x) {
@@ -1000,17 +1005,24 @@ var gettingTransactions = function gettingTransactions() {
 /*!******************************!*\
   !*** ./client/store/user.js ***!
   \******************************/
-/*! exports provided: me, auth, logout, default */
+/*! exports provided: updateBalance, me, auth, logout, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateBalance", function() { return updateBalance; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "me", function() { return me; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "auth", function() { return auth; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "logout", function() { return logout; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _history__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../history */ "./client/history.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -1033,8 +1045,14 @@ var removeUser = function removeUser() {
   return {
     type: REMOVE_USER
   };
-}; //thunks
+};
 
+var updateBalance = function updateBalance(totalCost) {
+  return {
+    type: UPDATE_BALANCE,
+    totalCost: totalCost
+  };
+}; //thunks
 
 var me = function me() {
   return (
@@ -1181,6 +1199,12 @@ var logout = function logout() {
 
     case REMOVE_USER:
       return defaultUser;
+
+    case UPDATE_BALANCE:
+      var newBalance = state.balance - action.totalCost;
+      return _objectSpread({}, state, {
+        balance: newBalance
+      });
 
     default:
       return state;
@@ -44710,7 +44734,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, __RouterContext, generatePath, matchPath, useHistory, useLocation, useParams, useRouteMatch, withRouter, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, __RouterContext, generatePath, matchPath, useHistory, useLocation, useParams, useRouteMatch, withRouter */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
