@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { buyingStock } from '../store';
+import { buyingStock, gettingPortfolio } from '../store';
 import { connect } from 'react-redux';
 
 class StockPurchaseForm extends Component {
@@ -21,6 +21,7 @@ class StockPurchaseForm extends Component {
   handleSubmit(e) {
     e.preventDefault();
     this.props.buyStock(this.state.ticker, this.state.quantity);
+    this.props.getPortfolio();
   }
 
   render() {
@@ -67,6 +68,9 @@ const mapDispatchToProps = dispatch => {
   return {
     buyStock: (ticker, quantity) => {
       dispatch(buyingStock(ticker, quantity));
+    },
+    getPortfolio: () => {
+      dispatch(gettingPortfolio());
     },
   };
 };

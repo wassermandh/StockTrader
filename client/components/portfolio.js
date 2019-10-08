@@ -5,13 +5,22 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 class Porfolio extends Component {
+  constructor(props) {
+    super(props);
+    // this.handleClick = this.handleClick.bind(this);
+  }
   componentDidMount() {
-    this.props.getPortfolio();
+    if (Object.keys(this.props.portfolio).length === 0) {
+      console.log('hi');
+      this.props.getPortfolio();
+    }
   }
   render() {
-    console.log('PORTFOLIO', this.props.portfolio);
     return (
       <div>
+        {/* <button type="button" onClick={this.handleClick}>
+          Click to load updated portfolio
+        </button> */}
         <div>
           <h1>Portfolio</h1>
           {Object.keys(this.props.portfolio).length > 0
@@ -51,6 +60,7 @@ const mapStateToProps = state => {
     portfolio: state.stock.portfolio,
     loadingMoreStocks: state.stock.loadingMoreStocks,
     grabbingPortfolio: state.stock.grabbingPortfolio,
+    stocks: state.stock.stocks,
   };
 };
 

@@ -341,23 +341,25 @@ var Porfolio =
 function (_Component) {
   _inherits(Porfolio, _Component);
 
-  function Porfolio() {
+  function Porfolio(props) {
     _classCallCheck(this, Porfolio);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Porfolio).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(Porfolio).call(this, props)); // this.handleClick = this.handleClick.bind(this);
   }
 
   _createClass(Porfolio, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.props.getPortfolio();
+      if (Object.keys(this.props.portfolio).length === 0) {
+        console.log('hi');
+        this.props.getPortfolio();
+      }
     }
   }, {
     key: "render",
     value: function render() {
       var _this = this;
 
-      console.log('PORTFOLIO', this.props.portfolio);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Portfolio"), Object.keys(this.props.portfolio).length > 0 ? Object.keys(this.props.portfolio).map(function (stock) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: stock
@@ -374,7 +376,8 @@ var mapStateToProps = function mapStateToProps(state) {
     user: state.user,
     portfolio: state.stock.portfolio,
     loadingMoreStocks: state.stock.loadingMoreStocks,
-    grabbingPortfolio: state.stock.grabbingPortfolio
+    grabbingPortfolio: state.stock.grabbingPortfolio,
+    stocks: state.stock.stocks
   };
 };
 
@@ -458,6 +461,7 @@ function (_Component) {
     value: function handleSubmit(e) {
       e.preventDefault();
       this.props.buyStock(this.state.ticker, this.state.quantity);
+      this.props.getPortfolio();
     }
   }, {
     key: "render",
@@ -496,6 +500,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     buyStock: function buyStock(ticker, quantity) {
       dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_1__["buyingStock"])(ticker, quantity));
+    },
+    getPortfolio: function getPortfolio() {
+      dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_1__["gettingPortfolio"])());
     }
   };
 };
@@ -858,8 +865,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./index */ "./client/store/index.js");
 /* harmony import */ var _secrets__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../secrets */ "./secrets.js");
 /* harmony import */ var _secrets__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_secrets__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var vm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vm */ "./node_modules/vm-browserify/index.js");
-/* harmony import */ var vm__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vm__WEBPACK_IMPORTED_MODULE_4__);
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -882,7 +887,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-
 var BUY_STOCK = 'BUY_STOCK';
 var INCORRECT_TICKER = 'INCORRECT_TICKER';
 var BALANCE_TOO_LOW = 'BALANCE_TOO_LOW';
@@ -890,6 +894,7 @@ var GOT_TRANSACTIONS = 'GOT_TRANSACTIONS';
 var GOT_PORTFOLIO = 'GOT_PORTFOLIO';
 var PORTFOLIO_API_THROTTLE = 'PORTFOLIO_API_THROTTLE';
 var TOO_MANY_CALLS = 'TOO_MANY_CALLS';
+var ADD_TO_PORTFOLIO = 'ADD_TO_PORTFOLIO';
 var defaultStocks = {
   stocks: [],
   error: '',
@@ -902,6 +907,13 @@ var defaultStocks = {
 var buyStock = function buyStock(stock) {
   return {
     type: BUY_STOCK,
+    stock: stock
+  };
+};
+
+var addToPortfolio = function addToPortfolio(stock) {
+  return {
+    type: ADD_TO_PORTFOLIO,
     stock: stock
   };
 };
@@ -972,7 +984,7 @@ var buyingStock = function buyingStock(stock, quantity) {
                 }
 
                 dispatch(incorrectTicker());
-                _context.next = 14;
+                _context.next = 16;
                 break;
 
               case 9:
@@ -985,14 +997,16 @@ var buyingStock = function buyingStock(stock, quantity) {
               case 11:
                 createdStock = _context.sent;
                 dispatch(buyStock(createdStock.data));
+                console.log(createdStock.data);
+                dispatch(addToPortfolio(createdStock.data));
                 dispatch(Object(_index__WEBPACK_IMPORTED_MODULE_2__["updateBalance"])(createdStock.data.totalCost));
 
-              case 14:
-                _context.next = 20;
+              case 16:
+                _context.next = 22;
                 break;
 
-              case 16:
-                _context.prev = 16;
+              case 18:
+                _context.prev = 18;
                 _context.t0 = _context["catch"](0);
                 console.log(_context.t0);
 
@@ -1002,12 +1016,12 @@ var buyingStock = function buyingStock(stock, quantity) {
                   dispatch(tooManyCalls());
                 }
 
-              case 20:
+              case 22:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 16]]);
+        }, _callee, null, [[0, 18]]);
       }));
 
       return function (_x) {
@@ -1058,7 +1072,26 @@ var gettingTransactions = function gettingTransactions() {
       };
     }()
   );
-};
+}; // export const addingToPortfolio = stock => async dispatch => {
+//   try {
+//     console.log(stock);
+//     let stockToAdd = {};
+//     const { data } = await axios.get(alphavantageCall(stock.ticker));
+//     if (data.Note) {
+//       dispatch(tooManyCalls());
+//     }
+//     const ticker = data['Global Quote']['01. symbol'];
+//     const latestPrice = Number(data['Global Quote']['05. price']);
+//     const openPrice = Number(data['Global Quote']['02. open']);
+//     const trend = latestPrice - openPrice;
+//     stockToAdd[ticker].latestPrice = latestPrice;
+//     stockToAdd[ticker].openPrice = openPrice;
+//     stockToAdd[ticker].trend = trend;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
+
 var gettingPortfolio = function gettingPortfolio() {
   return (
     /*#__PURE__*/
@@ -1145,7 +1178,6 @@ var gettingPortfolio = function gettingPortfolio() {
 
   switch (action.type) {
     case BUY_STOCK:
-      console.log(action.stock);
       return _objectSpread({}, state, {
         stocks: [].concat(_toConsumableArray(state.stocks), [action.stock]),
         error: '',
@@ -1156,6 +1188,19 @@ var gettingPortfolio = function gettingPortfolio() {
     case INCORRECT_TICKER:
       return _objectSpread({}, state, {
         error: 'Ticket is incorrect'
+      });
+
+    case ADD_TO_PORTFOLIO:
+      var newPortfolio = state.portfolio;
+
+      if (newPortfolio[action.stock.ticker]) {
+        newPortfolio[action.stock.ticker].quantity += action.stock.quantity;
+      } else {
+        newPortfolio[action.stock.ticker] = action.stock;
+      }
+
+      return _objectSpread({}, state, {
+        portfolio: newPortfolio
       });
 
     case BALANCE_TOO_LOW:
@@ -1170,7 +1215,7 @@ var gettingPortfolio = function gettingPortfolio() {
 
     case PORTFOLIO_API_THROTTLE:
       return _objectSpread({}, state, {
-        loadingMoreStocks: 'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and try again for updated information',
+        loadingMoreStocks: 'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and try again for updated portfolio information',
         grabbingPortfolio: false
       });
 
@@ -52154,166 +52199,6 @@ function valueEqual(a, b) {
 
 /***/ }),
 
-/***/ "./node_modules/vm-browserify/index.js":
-/*!*********************************************!*\
-  !*** ./node_modules/vm-browserify/index.js ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var indexOf = function (xs, item) {
-    if (xs.indexOf) return xs.indexOf(item);
-    else for (var i = 0; i < xs.length; i++) {
-        if (xs[i] === item) return i;
-    }
-    return -1;
-};
-var Object_keys = function (obj) {
-    if (Object.keys) return Object.keys(obj)
-    else {
-        var res = [];
-        for (var key in obj) res.push(key)
-        return res;
-    }
-};
-
-var forEach = function (xs, fn) {
-    if (xs.forEach) return xs.forEach(fn)
-    else for (var i = 0; i < xs.length; i++) {
-        fn(xs[i], i, xs);
-    }
-};
-
-var defineProp = (function() {
-    try {
-        Object.defineProperty({}, '_', {});
-        return function(obj, name, value) {
-            Object.defineProperty(obj, name, {
-                writable: true,
-                enumerable: false,
-                configurable: true,
-                value: value
-            })
-        };
-    } catch(e) {
-        return function(obj, name, value) {
-            obj[name] = value;
-        };
-    }
-}());
-
-var globals = ['Array', 'Boolean', 'Date', 'Error', 'EvalError', 'Function',
-'Infinity', 'JSON', 'Math', 'NaN', 'Number', 'Object', 'RangeError',
-'ReferenceError', 'RegExp', 'String', 'SyntaxError', 'TypeError', 'URIError',
-'decodeURI', 'decodeURIComponent', 'encodeURI', 'encodeURIComponent', 'escape',
-'eval', 'isFinite', 'isNaN', 'parseFloat', 'parseInt', 'undefined', 'unescape'];
-
-function Context() {}
-Context.prototype = {};
-
-var Script = exports.Script = function NodeScript (code) {
-    if (!(this instanceof Script)) return new Script(code);
-    this.code = code;
-};
-
-Script.prototype.runInContext = function (context) {
-    if (!(context instanceof Context)) {
-        throw new TypeError("needs a 'context' argument.");
-    }
-    
-    var iframe = document.createElement('iframe');
-    if (!iframe.style) iframe.style = {};
-    iframe.style.display = 'none';
-    
-    document.body.appendChild(iframe);
-    
-    var win = iframe.contentWindow;
-    var wEval = win.eval, wExecScript = win.execScript;
-
-    if (!wEval && wExecScript) {
-        // win.eval() magically appears when this is called in IE:
-        wExecScript.call(win, 'null');
-        wEval = win.eval;
-    }
-    
-    forEach(Object_keys(context), function (key) {
-        win[key] = context[key];
-    });
-    forEach(globals, function (key) {
-        if (context[key]) {
-            win[key] = context[key];
-        }
-    });
-    
-    var winKeys = Object_keys(win);
-
-    var res = wEval.call(win, this.code);
-    
-    forEach(Object_keys(win), function (key) {
-        // Avoid copying circular objects like `top` and `window` by only
-        // updating existing context properties or new properties in the `win`
-        // that was only introduced after the eval.
-        if (key in context || indexOf(winKeys, key) === -1) {
-            context[key] = win[key];
-        }
-    });
-
-    forEach(globals, function (key) {
-        if (!(key in context)) {
-            defineProp(context, key, win[key]);
-        }
-    });
-    
-    document.body.removeChild(iframe);
-    
-    return res;
-};
-
-Script.prototype.runInThisContext = function () {
-    return eval(this.code); // maybe...
-};
-
-Script.prototype.runInNewContext = function (context) {
-    var ctx = Script.createContext(context);
-    var res = this.runInContext(ctx);
-
-    if (context) {
-        forEach(Object_keys(ctx), function (key) {
-            context[key] = ctx[key];
-        });
-    }
-
-    return res;
-};
-
-forEach(Object_keys(Script.prototype), function (name) {
-    exports[name] = Script[name] = function (code) {
-        var s = Script(code);
-        return s[name].apply(s, [].slice.call(arguments, 1));
-    };
-});
-
-exports.isContext = function (context) {
-    return context instanceof Context;
-};
-
-exports.createScript = function (code) {
-    return exports.Script(code);
-};
-
-exports.createContext = Script.createContext = function (context) {
-    var copy = new Context();
-    if(typeof context === 'object') {
-        forEach(Object_keys(context), function (key) {
-            copy[key] = context[key];
-        });
-    }
-    return copy;
-};
-
-
-/***/ }),
-
 /***/ "./node_modules/webpack/buildin/global.js":
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
@@ -52388,7 +52273,7 @@ module.exports = function(originalModule) {
 /***/ (function(module, exports) {
 
 var alphavantageCall = function alphavantageCall(stock) {
-  return "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=".concat(stock, "&apikey=O1X1GO5YCEATSYLF");
+  return "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=".concat(stock, "&apikey=0854N4GV5GA8ZW3K");
 };
 
 module.exports = alphavantageCall;

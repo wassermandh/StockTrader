@@ -2,7 +2,6 @@ const router = require('express').Router();
 const { Stock } = require('../db/models');
 const axios = require('axios');
 module.exports = router;
-const alphavantageCall = require('../../secrets');
 
 router.get('/transactions', async (req, res, next) => {
   try {
@@ -49,6 +48,8 @@ router.post('/', async (req, res, next) => {
     }
     const stock = req.body.data['Global Quote']['01. symbol'];
     const stockPrice = Number(req.body.data['Global Quote']['05. price']);
+    const openPrice = Number(req.body.data['Global Quote']['02. open']);
+    const trend = stockPrice - openPrice;
     const quantity = Number(req.body.quantity);
     const totalCost = stockPrice * quantity;
     const newBalance = req.user.dataValues.balance - totalCost;
@@ -68,6 +69,9 @@ router.post('/', async (req, res, next) => {
     await req.user.addStock(newStock);
 
     newStock.dataValues.totalCost = totalCost;
+    newStock.dataValues.openPrice = openPrice;
+    newStock.dataValues.trend = trend;
+    newStock.dataValues.latestPrice = stockPrice;
     res.send(newStock);
   } catch (err) {
     next(err);

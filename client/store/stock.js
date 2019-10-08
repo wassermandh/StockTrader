@@ -2,7 +2,6 @@ import axios from 'axios';
 import history from '../history';
 import { updateBalance } from './index';
 import alphavantageCall from '../../secrets';
-import { runInNewContext } from 'vm';
 
 const BUY_STOCK = 'BUY_STOCK';
 const INCORRECT_TICKER = 'INCORRECT_TICKER';
@@ -11,6 +10,7 @@ const GOT_TRANSACTIONS = 'GOT_TRANSACTIONS';
 const GOT_PORTFOLIO = 'GOT_PORTFOLIO';
 const PORTFOLIO_API_THROTTLE = 'PORTFOLIO_API_THROTTLE';
 const TOO_MANY_CALLS = 'TOO_MANY_CALLS';
+const ADD_TO_PORTFOLIO = 'ADD_TO_PORTFOLIO';
 
 const defaultStocks = {
   stocks: [],
@@ -25,6 +25,13 @@ const defaultStocks = {
 const buyStock = stock => {
   return {
     type: BUY_STOCK,
+    stock,
+  };
+};
+
+const addToPortfolio = stock => {
+  return {
+    type: ADD_TO_PORTFOLIO,
     stock,
   };
 };
@@ -76,6 +83,8 @@ export const buyingStock = (stock, quantity) => async dispatch => {
     } else {
       const createdStock = await axios.post('/api/stocks/', { data, quantity });
       dispatch(buyStock(createdStock.data));
+      console.log(createdStock.data);
+      dispatch(addToPortfolio(createdStock.data));
       dispatch(updateBalance(createdStock.data.totalCost));
     }
   } catch (err) {
@@ -96,6 +105,26 @@ export const gettingTransactions = () => async dispatch => {
     console.log(err);
   }
 };
+
+// export const addingToPortfolio = stock => async dispatch => {
+//   try {
+//     console.log(stock);
+//     let stockToAdd = {};
+//     const { data } = await axios.get(alphavantageCall(stock.ticker));
+//     if (data.Note) {
+//       dispatch(tooManyCalls());
+//     }
+//     const ticker = data['Global Quote']['01. symbol'];
+//     const latestPrice = Number(data['Global Quote']['05. price']);
+//     const openPrice = Number(data['Global Quote']['02. open']);
+//     const trend = latestPrice - openPrice;
+//     stockToAdd[ticker].latestPrice = latestPrice;
+//     stockToAdd[ticker].openPrice = openPrice;
+//     stockToAdd[ticker].trend = trend;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
 export const gettingPortfolio = () => async dispatch => {
   try {
@@ -127,7 +156,6 @@ export const gettingPortfolio = () => async dispatch => {
 export default function(state = defaultStocks, action) {
   switch (action.type) {
     case BUY_STOCK:
-      console.log(action.stock);
       return {
         ...state,
         stocks: [...state.stocks, action.stock],
@@ -137,6 +165,14 @@ export default function(state = defaultStocks, action) {
       };
     case INCORRECT_TICKER:
       return { ...state, error: 'Ticket is incorrect' };
+    case ADD_TO_PORTFOLIO:
+      let newPortfolio = state.portfolio;
+      if (newPortfolio[action.stock.ticker]) {
+        newPortfolio[action.stock.ticker].quantity += action.stock.quantity;
+      } else {
+        newPortfolio[action.stock.ticker] = action.stock;
+      }
+      return { ...state, portfolio: newPortfolio };
     case BALANCE_TOO_LOW:
       return { ...state, error: 'Your balance is too low to purchase this' };
     case GOT_TRANSACTIONS:
@@ -145,7 +181,7 @@ export default function(state = defaultStocks, action) {
       return {
         ...state,
         loadingMoreStocks:
-          'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and try again for updated information',
+          'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and try again for updated portfolio information',
         grabbingPortfolio: false,
       };
     case GOT_PORTFOLIO:
