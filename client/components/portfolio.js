@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import { gettingPortfolio } from '../store';
 import StockPurchaseForm from './stock_purchase_form';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
 class Porfolio extends Component {
-  async componentDidMount() {
-    await axios.get('/api/stocks/portfolio');
+  componentDidMount() {
+    this.props.getPortfolio();
   }
   render() {
     return (
@@ -23,4 +24,12 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(Porfolio);
+const mapDispatchToProps = dispatch => {
+  return {
+    getPortfolio: () => {
+      dispatch(gettingPortfolio());
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Porfolio);

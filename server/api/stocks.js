@@ -32,10 +32,7 @@ router.get('/portfolio', async (req, res, next) => {
       }
     });
 
-    Object.keys(uniqueStocks).forEach(async stock => {
-      const { data } = await axios.get(alphavantageCall(stock));
-      console.log(data);
-    });
+    res.send(uniqueStocks);
   } catch (err) {
     next(err);
   }

@@ -307,15 +307,12 @@ Navbar.propTypes = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _stock_purchase_form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./stock_purchase_form */ "./client/components/stock_purchase_form.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../store */ "./client/store/index.js");
+/* harmony import */ var _stock_purchase_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./stock_purchase_form */ "./client/components/stock_purchase_form.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -338,6 +335,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var Porfolio =
 /*#__PURE__*/
 function (_Component) {
@@ -351,35 +349,13 @@ function (_Component) {
 
   _createClass(Porfolio, [{
     key: "componentDidMount",
-    value: function () {
-      var _componentDidMount = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/stocks/portfolio');
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }));
-
-      function componentDidMount() {
-        return _componentDidMount.apply(this, arguments);
-      }
-
-      return componentDidMount;
-    }()
+    value: function componentDidMount() {
+      this.props.getPortfolio();
+    }
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Cash - ", this.props.user.balance), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_stock_purchase_form__WEBPACK_IMPORTED_MODULE_1__["default"], null));
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Cash - ", this.props.user.balance), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_stock_purchase_form__WEBPACK_IMPORTED_MODULE_2__["default"], null));
     }
   }]);
 
@@ -392,7 +368,15 @@ var mapStateToProps = function mapStateToProps(state) {
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, null)(Porfolio));
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    getPortfolio: function getPortfolio() {
+      dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_1__["gettingPortfolio"])());
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps, mapDispatchToProps)(Porfolio));
 
 /***/ }),
 
@@ -799,7 +783,7 @@ Routes.propTypes = {
 /*!*******************************!*\
   !*** ./client/store/index.js ***!
   \*******************************/
-/*! exports provided: default, updateBalance, me, auth, logout, buyingStock, gettingTransactions */
+/*! exports provided: default, updateBalance, me, auth, logout, buyingStock, gettingTransactions, gettingPortfolio */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -823,6 +807,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "buyingStock", function() { return _stock__WEBPACK_IMPORTED_MODULE_5__["buyingStock"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "gettingTransactions", function() { return _stock__WEBPACK_IMPORTED_MODULE_5__["gettingTransactions"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "gettingPortfolio", function() { return _stock__WEBPACK_IMPORTED_MODULE_5__["gettingPortfolio"]; });
 
 
 
@@ -848,19 +834,22 @@ var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, m
 /*!*******************************!*\
   !*** ./client/store/stock.js ***!
   \*******************************/
-/*! exports provided: buyingStock, gettingTransactions, default */
+/*! exports provided: buyingStock, gettingTransactions, gettingPortfolio, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "buyingStock", function() { return buyingStock; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gettingTransactions", function() { return gettingTransactions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gettingPortfolio", function() { return gettingPortfolio; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _history__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../history */ "./client/history.js");
 /* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./index */ "./client/store/index.js");
 /* harmony import */ var _secrets__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../secrets */ "./secrets.js");
 /* harmony import */ var _secrets__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_secrets__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vm */ "./node_modules/vm-browserify/index.js");
+/* harmony import */ var vm__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vm__WEBPACK_IMPORTED_MODULE_4__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -883,14 +872,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+
 var BUY_STOCK = 'BUY_STOCK';
 var INCORRECT_TICKER = 'INCORRECT_TICKER';
 var BALANCE_TOO_LOW = 'BALANCE_TOO_LOW';
 var GOT_TRANSACTIONS = 'GOT_TRANSACTIONS';
 var TOO_MANY_API_CALLS = 'TOO_MANY_API_CALLS';
+var GOT_PORTFOLIO = 'GOT_PORTFOLIO';
+var PORTFOLIO_API_THROTTLE = 'PORTFOLIO_API_THROTTLE';
 var defaultStocks = {
   stocks: [],
-  error: ''
+  error: '',
+  loadingMoreStocks: '',
+  portfolio: []
 }; //action creators
 
 var buyStock = function buyStock(stock) {
@@ -912,6 +906,13 @@ var balanceTooLow = function balanceTooLow() {
   };
 };
 
+var gotPorfolio = function gotPorfolio(stocks) {
+  return {
+    type: GOT_PORTFOLIO,
+    stocks: stocks
+  };
+};
+
 var gotTransactions = function gotTransactions(stocks) {
   return {
     type: GOT_TRANSACTIONS,
@@ -922,6 +923,12 @@ var gotTransactions = function gotTransactions(stocks) {
 var tooManyCalls = function tooManyCalls() {
   return {
     type: TOO_MANY_API_CALLS
+  };
+};
+
+var portfolioAPIThrottle = function portfolioAPIThrottle() {
+  return {
+    type: PORTFOLIO_API_THROTTLE
   };
 }; //thunks
 
@@ -1039,6 +1046,85 @@ var gettingTransactions = function gettingTransactions() {
       };
     }()
   );
+};
+var gettingPortfolio = function gettingPortfolio() {
+  return (
+    /*#__PURE__*/
+    function () {
+      var _ref5 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee3(dispatch) {
+        var _ref6, uniqueStocks, tickers, i, stock, _ref7, data, ticker, latestPrice, openPrice, trend;
+
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+                _context3.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/stocks/portfolio');
+
+              case 3:
+                _ref6 = _context3.sent;
+                uniqueStocks = _ref6.data;
+                tickers = Object.keys(uniqueStocks);
+                i = 0;
+
+              case 7:
+                if (!(i < tickers.length)) {
+                  _context3.next = 24;
+                  break;
+                }
+
+                if (i % 5 === 0) {
+                  setTimeout(function () {
+                    dispatch(portfolioAPIThrottle());
+                  });
+                }
+
+                stock = tickers[i];
+                _context3.next = 12;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(_secrets__WEBPACK_IMPORTED_MODULE_3___default()(stock));
+
+              case 12:
+                _ref7 = _context3.sent;
+                data = _ref7.data;
+                ticker = data['Global Quote']['01. symbol'];
+                latestPrice = Number(data['Global Quote']['05. price']);
+                openPrice = Number(data['Global Quote']['02. open']);
+                trend = latestPrice - openPrice;
+                uniqueStocks[ticker].latestPrice = latestPrice;
+                uniqueStocks[ticker].openPrice = openPrice;
+                uniqueStocks[ticker].trend = trend;
+
+              case 21:
+                i++;
+                _context3.next = 7;
+                break;
+
+              case 24:
+                dispatch(gotPorfolio(uniqueStocks));
+                _context3.next = 30;
+                break;
+
+              case 27:
+                _context3.prev = 27;
+                _context3.t0 = _context3["catch"](0);
+                console.log(_context3.t0);
+
+              case 30:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[0, 27]]);
+      }));
+
+      return function (_x3) {
+        return _ref5.apply(this, arguments);
+      };
+    }()
+  );
 }; //reducer
 
 /* harmony default export */ __webpack_exports__["default"] = (function () {
@@ -1070,6 +1156,18 @@ var gettingTransactions = function gettingTransactions() {
     case TOO_MANY_API_CALLS:
       return _objectSpread({}, state, {
         error: 'The API has been throttled. Sorry!'
+      });
+
+    case PORTFOLIO_API_THROTTLE:
+      return _objectSpread({}, state, {
+        error: '',
+        loadingMoreStocks: 'Sorry, this API has limitations... every 5 unique stocks takes one additionam minute... please wait'
+      });
+
+    case GOT_PORTFOLIO:
+      return _objectSpread({}, state, {
+        error: '',
+        portfolio: action.stocks
       });
 
     default:
@@ -52036,6 +52134,166 @@ function valueEqual(a, b) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (valueEqual);
+
+
+/***/ }),
+
+/***/ "./node_modules/vm-browserify/index.js":
+/*!*********************************************!*\
+  !*** ./node_modules/vm-browserify/index.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var indexOf = function (xs, item) {
+    if (xs.indexOf) return xs.indexOf(item);
+    else for (var i = 0; i < xs.length; i++) {
+        if (xs[i] === item) return i;
+    }
+    return -1;
+};
+var Object_keys = function (obj) {
+    if (Object.keys) return Object.keys(obj)
+    else {
+        var res = [];
+        for (var key in obj) res.push(key)
+        return res;
+    }
+};
+
+var forEach = function (xs, fn) {
+    if (xs.forEach) return xs.forEach(fn)
+    else for (var i = 0; i < xs.length; i++) {
+        fn(xs[i], i, xs);
+    }
+};
+
+var defineProp = (function() {
+    try {
+        Object.defineProperty({}, '_', {});
+        return function(obj, name, value) {
+            Object.defineProperty(obj, name, {
+                writable: true,
+                enumerable: false,
+                configurable: true,
+                value: value
+            })
+        };
+    } catch(e) {
+        return function(obj, name, value) {
+            obj[name] = value;
+        };
+    }
+}());
+
+var globals = ['Array', 'Boolean', 'Date', 'Error', 'EvalError', 'Function',
+'Infinity', 'JSON', 'Math', 'NaN', 'Number', 'Object', 'RangeError',
+'ReferenceError', 'RegExp', 'String', 'SyntaxError', 'TypeError', 'URIError',
+'decodeURI', 'decodeURIComponent', 'encodeURI', 'encodeURIComponent', 'escape',
+'eval', 'isFinite', 'isNaN', 'parseFloat', 'parseInt', 'undefined', 'unescape'];
+
+function Context() {}
+Context.prototype = {};
+
+var Script = exports.Script = function NodeScript (code) {
+    if (!(this instanceof Script)) return new Script(code);
+    this.code = code;
+};
+
+Script.prototype.runInContext = function (context) {
+    if (!(context instanceof Context)) {
+        throw new TypeError("needs a 'context' argument.");
+    }
+    
+    var iframe = document.createElement('iframe');
+    if (!iframe.style) iframe.style = {};
+    iframe.style.display = 'none';
+    
+    document.body.appendChild(iframe);
+    
+    var win = iframe.contentWindow;
+    var wEval = win.eval, wExecScript = win.execScript;
+
+    if (!wEval && wExecScript) {
+        // win.eval() magically appears when this is called in IE:
+        wExecScript.call(win, 'null');
+        wEval = win.eval;
+    }
+    
+    forEach(Object_keys(context), function (key) {
+        win[key] = context[key];
+    });
+    forEach(globals, function (key) {
+        if (context[key]) {
+            win[key] = context[key];
+        }
+    });
+    
+    var winKeys = Object_keys(win);
+
+    var res = wEval.call(win, this.code);
+    
+    forEach(Object_keys(win), function (key) {
+        // Avoid copying circular objects like `top` and `window` by only
+        // updating existing context properties or new properties in the `win`
+        // that was only introduced after the eval.
+        if (key in context || indexOf(winKeys, key) === -1) {
+            context[key] = win[key];
+        }
+    });
+
+    forEach(globals, function (key) {
+        if (!(key in context)) {
+            defineProp(context, key, win[key]);
+        }
+    });
+    
+    document.body.removeChild(iframe);
+    
+    return res;
+};
+
+Script.prototype.runInThisContext = function () {
+    return eval(this.code); // maybe...
+};
+
+Script.prototype.runInNewContext = function (context) {
+    var ctx = Script.createContext(context);
+    var res = this.runInContext(ctx);
+
+    if (context) {
+        forEach(Object_keys(ctx), function (key) {
+            context[key] = ctx[key];
+        });
+    }
+
+    return res;
+};
+
+forEach(Object_keys(Script.prototype), function (name) {
+    exports[name] = Script[name] = function (code) {
+        var s = Script(code);
+        return s[name].apply(s, [].slice.call(arguments, 1));
+    };
+});
+
+exports.isContext = function (context) {
+    return context instanceof Context;
+};
+
+exports.createScript = function (code) {
+    return exports.Script(code);
+};
+
+exports.createContext = Script.createContext = function (context) {
+    var copy = new Context();
+    if(typeof context === 'object') {
+        forEach(Object_keys(context), function (key) {
+            copy[key] = context[key];
+        });
+    }
+    return copy;
+};
 
 
 /***/ }),

@@ -2,14 +2,22 @@ import axios from 'axios';
 import history from '../history';
 import { updateBalance } from './index';
 import alphavantageCall from '../../secrets';
+import { runInNewContext } from 'vm';
 
 const BUY_STOCK = 'BUY_STOCK';
 const INCORRECT_TICKER = 'INCORRECT_TICKER';
 const BALANCE_TOO_LOW = 'BALANCE_TOO_LOW';
 const GOT_TRANSACTIONS = 'GOT_TRANSACTIONS';
 const TOO_MANY_API_CALLS = 'TOO_MANY_API_CALLS';
+const GOT_PORTFOLIO = 'GOT_PORTFOLIO';
+const PORTFOLIO_API_THROTTLE = 'PORTFOLIO_API_THROTTLE';
 
-const defaultStocks = { stocks: [], error: '' };
+const defaultStocks = {
+  stocks: [],
+  error: '',
+  loadingMoreStocks: '',
+  portfolio: [],
+};
 
 //action creators
 const buyStock = stock => {
@@ -31,6 +39,13 @@ const balanceTooLow = () => {
   };
 };
 
+const gotPorfolio = stocks => {
+  return {
+    type: GOT_PORTFOLIO,
+    stocks,
+  };
+};
+
 const gotTransactions = stocks => {
   return {
     type: GOT_TRANSACTIONS,
@@ -44,24 +59,16 @@ const tooManyCalls = () => {
   };
 };
 
+const portfolioAPIThrottle = () => {
+  return {
+    type: PORTFOLIO_API_THROTTLE,
+  };
+};
+
 //thunks
 export const buyingStock = (stock, quantity) => async dispatch => {
   try {
     const { data } = await axios.get(alphavantageCall(stock));
-    // const data = {
-    //   'Global Quote': {
-    //     '01. symbol': 'MSFT',
-    //     '02. open': '137.1400',
-    //     '03. high': '138.1800',
-    //     '04. low': '137.0200',
-    //     '05. price': '137.1200',
-    //     '06. volume': '12682685',
-    //     '07. latest trading day': '2019-10-07',
-    //     '08. previous close': '138.1200',
-    //     '09. change': '-1.0000',
-    //     '10. change percent': '-0.7240%',
-    //   },
-    // };
     if (data['Error Message']) {
       dispatch(incorrectTicker());
     } else {
@@ -88,6 +95,33 @@ export const gettingTransactions = () => async dispatch => {
   }
 };
 
+export const gettingPortfolio = () => async dispatch => {
+  try {
+    const { data: uniqueStocks } = await axios.get('/api/stocks/portfolio');
+    const tickers = Object.keys(uniqueStocks);
+
+    for (let i = 0; i < tickers.length; i++) {
+      if (i % 5 === 0) {
+        setTimeout(() => {
+          dispatch(portfolioAPIThrottle());
+        });
+      }
+      let stock = tickers[i];
+      const { data } = await axios.get(alphavantageCall(stock));
+      const ticker = data['Global Quote']['01. symbol'];
+      const latestPrice = Number(data['Global Quote']['05. price']);
+      const openPrice = Number(data['Global Quote']['02. open']);
+      const trend = latestPrice - openPrice;
+      uniqueStocks[ticker].latestPrice = latestPrice;
+      uniqueStocks[ticker].openPrice = openPrice;
+      uniqueStocks[ticker].trend = trend;
+    }
+    dispatch(gotPorfolio(uniqueStocks));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 //reducer
 export default function(state = defaultStocks, action) {
   switch (action.type) {
@@ -104,6 +138,19 @@ export default function(state = defaultStocks, action) {
       return { ...state, stocks: action.stocks };
     case TOO_MANY_API_CALLS:
       return { ...state, error: 'The API has been throttled. Sorry!' };
+    case PORTFOLIO_API_THROTTLE:
+      return {
+        ...state,
+        error: '',
+        loadingMoreStocks:
+          'Sorry, this API has limitations... every 5 unique stocks takes one additionam minute... please wait',
+      };
+    case GOT_PORTFOLIO:
+      return {
+        ...state,
+        error: '',
+        portfolio: action.stocks,
+      };
     default:
       return state;
   }
