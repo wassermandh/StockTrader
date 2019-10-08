@@ -4,10 +4,11 @@ import StockPurchaseForm from './stock_purchase_form';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+let i = 0;
+
 class Porfolio extends Component {
   constructor(props) {
     super(props);
-    // this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount() {
     this.props.getPortfolio();
@@ -15,19 +16,16 @@ class Porfolio extends Component {
   render() {
     return (
       <div>
-        {/* <button type="button" onClick={this.handleClick}>
-          Click to load updated portfolio
-        </button> */}
         <div>
           <h1>Portfolio</h1>
+          {/* <button type="button" onClick={this.handleClick}>
+            Click to load as many items in portfolio as API key will allow for
+          </button> */}
           {Object.keys(this.props.portfolio).length > 0
             ? Object.keys(this.props.portfolio).map(stock => {
                 return (
-                  <div
-                    key={stock}
-                    className={this.props.portfolio[stock].performance}
-                  >
-                    <strong>
+                  <div key={stock}>
+                    <strong className={this.props.portfolio[stock].performance}>
                       {stock} - {this.props.portfolio[stock].quantity}
                     </strong>
                     <span>

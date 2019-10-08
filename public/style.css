@@ -1,11 +1,11 @@
 .neg {
-  background-color: red;
+  color: red;
 }
 
 .pos {
-  background-color: lightgreen;
+  color: lightgreen;
 }
 
 .neutral {
-  background-color: grey;
+  color: grey;
 }

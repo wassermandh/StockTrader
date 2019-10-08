@@ -18,7 +18,6 @@ const defaultStocks = {
   loadingMoreStocks: '',
   portfolio: {},
   grabbingPortfolio: true,
-  uniqueStocks: 0,
 };
 
 //action creators
@@ -83,7 +82,6 @@ export const buyingStock = (stock, quantity) => async dispatch => {
     } else {
       const createdStock = await axios.post('/api/stocks/', { data, quantity });
       dispatch(buyStock(createdStock.data));
-      console.log(createdStock.data);
       dispatch(addToPortfolio(createdStock.data));
       dispatch(updateBalance(createdStock.data.totalCost));
     }
@@ -146,9 +144,6 @@ export const gettingPortfolio = () => async dispatch => {
       const { data } = await axios.get(alphavantageCall(stock));
       if (data.Note) {
         dispatch(portfolioAPIThrottle());
-        setTimeout(() => {}, 60000);
-        i--;
-        continue;
       }
       const ticker = data['Global Quote']['01. symbol'];
       const latestPrice = Number(data['Global Quote']['05. price']);
@@ -195,7 +190,7 @@ export default function(state = defaultStocks, action) {
       return {
         ...state,
         loadingMoreStocks:
-          'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute for more stocks to load',
+          'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and try again',
         grabbingPortfolio: false,
       };
     case GOT_PORTFOLIO:

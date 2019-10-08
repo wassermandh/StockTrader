@@ -21,7 +21,6 @@ class StockPurchaseForm extends Component {
   handleSubmit(e) {
     e.preventDefault();
     this.props.buyStock(this.state.ticker, this.state.quantity);
-    this.props.getPortfolio();
   }
 
   render() {

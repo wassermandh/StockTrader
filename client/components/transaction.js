@@ -20,7 +20,6 @@ class Transactions extends Component {
         </div>
         <div>
           {this.props.stocks.map(stock => {
-            console.log(stock);
             return (
               <div key={stock.id}>
                 <strong>

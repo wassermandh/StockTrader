@@ -335,6 +335,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+var i = 0;
 
 var Porfolio =
 /*#__PURE__*/
@@ -344,7 +345,7 @@ function (_Component) {
   function Porfolio(props) {
     _classCallCheck(this, Porfolio);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Porfolio).call(this, props)); // this.handleClick = this.handleClick.bind(this);
+    return _possibleConstructorReturn(this, _getPrototypeOf(Porfolio).call(this, props));
   }
 
   _createClass(Porfolio, [{
@@ -359,9 +360,10 @@ function (_Component) {
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Portfolio"), Object.keys(this.props.portfolio).length > 0 ? Object.keys(this.props.portfolio).map(function (stock) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          key: stock,
+          key: stock
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", {
           className: _this.props.portfolio[stock].performance
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, stock, " - ", _this.props.portfolio[stock].quantity), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, _this.props.portfolio[stock].quantity * _this.props.portfolio[stock].latestPrice));
+        }, stock, " - ", _this.props.portfolio[stock].quantity), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, _this.props.portfolio[stock].quantity * _this.props.portfolio[stock].latestPrice));
       }) : '', this.props.grabbingPortfolio ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Loading...") : '', this.props.loadingMoreStocks.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.props.loadingMoreStocks) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Cash - ", this.props.user.balance), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_stock_purchase_form__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
     }
   }]);
@@ -459,7 +461,6 @@ function (_Component) {
     value: function handleSubmit(e) {
       e.preventDefault();
       this.props.buyStock(this.state.ticker, this.state.quantity);
-      this.props.getPortfolio();
     }
   }, {
     key: "render",
@@ -567,7 +568,6 @@ function (_Component) {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Transactions")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.stocks.map(function (stock) {
-        console.log(stock);
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: stock.id
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "BUY (", stock.ticker, ") - ", stock.quantity, " shares @ $", stock.priceAtPurchase), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
@@ -898,8 +898,7 @@ var defaultStocks = {
   error: '',
   loadingMoreStocks: '',
   portfolio: {},
-  grabbingPortfolio: true,
-  uniqueStocks: 0
+  grabbingPortfolio: true
 }; //action creators
 
 var buyStock = function buyStock(stock) {
@@ -982,7 +981,7 @@ var buyingStock = function buyingStock(stock, quantity) {
                 }
 
                 dispatch(incorrectTicker());
-                _context.next = 16;
+                _context.next = 15;
                 break;
 
               case 9:
@@ -995,16 +994,15 @@ var buyingStock = function buyingStock(stock, quantity) {
               case 11:
                 createdStock = _context.sent;
                 dispatch(buyStock(createdStock.data));
-                console.log(createdStock.data);
                 dispatch(addToPortfolio(createdStock.data));
                 dispatch(Object(_index__WEBPACK_IMPORTED_MODULE_2__["updateBalance"])(createdStock.data.totalCost));
 
-              case 16:
-                _context.next = 22;
+              case 15:
+                _context.next = 21;
                 break;
 
-              case 18:
-                _context.prev = 18;
+              case 17:
+                _context.prev = 17;
                 _context.t0 = _context["catch"](0);
                 console.log(_context.t0);
 
@@ -1014,12 +1012,12 @@ var buyingStock = function buyingStock(stock, quantity) {
                   dispatch(tooManyCalls());
                 }
 
-              case 22:
+              case 21:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 18]]);
+        }, _callee, null, [[0, 17]]);
       }));
 
       return function (_x) {
@@ -1126,7 +1124,7 @@ var gettingPortfolio = function gettingPortfolio() {
 
               case 8:
                 if (!(i < tickers.length)) {
-                  _context3.next = 30;
+                  _context3.next = 26;
                   break;
                 }
 
@@ -1138,17 +1136,10 @@ var gettingPortfolio = function gettingPortfolio() {
                 _ref7 = _context3.sent;
                 data = _ref7.data;
 
-                if (!data.Note) {
-                  _context3.next = 19;
-                  break;
+                if (data.Note) {
+                  dispatch(portfolioAPIThrottle());
                 }
 
-                dispatch(portfolioAPIThrottle());
-                setTimeout(function () {}, 60000);
-                i--;
-                return _context3.abrupt("continue", 27);
-
-              case 19:
                 ticker = data['Global Quote']['01. symbol'];
                 latestPrice = Number(data['Global Quote']['05. price']);
                 openPrice = Number(data['Global Quote']['02. open']);
@@ -1158,27 +1149,27 @@ var gettingPortfolio = function gettingPortfolio() {
                 uniqueStocks[ticker].trend = trend;
                 uniqueStocks[ticker].performance = trendDirection(trend);
 
-              case 27:
+              case 23:
                 i++;
                 _context3.next = 8;
                 break;
 
-              case 30:
+              case 26:
                 dispatch(gotPorfolio(uniqueStocks));
-                _context3.next = 36;
+                _context3.next = 32;
                 break;
 
-              case 33:
-                _context3.prev = 33;
+              case 29:
+                _context3.prev = 29;
                 _context3.t0 = _context3["catch"](0);
                 console.log(_context3.t0);
 
-              case 36:
+              case 32:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 33]]);
+        }, _callee3, null, [[0, 29]]);
       }));
 
       return function (_x3) {
@@ -1231,7 +1222,7 @@ var gettingPortfolio = function gettingPortfolio() {
 
     case PORTFOLIO_API_THROTTLE:
       return _objectSpread({}, state, {
-        loadingMoreStocks: 'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute for more stocks to load',
+        loadingMoreStocks: 'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and try again',
         grabbingPortfolio: false
       });
 
