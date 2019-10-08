@@ -1,12 +1,36 @@
 const router = require('express').Router();
 const { Stock } = require('../db/models');
+const axios = require('axios');
 module.exports = router;
 
 router.get('/transactions', async (req, res, next) => {
   try {
     const allStocks = await req.user.getStocks();
-    console.log(allStocks);
     res.send(allStocks);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/portfolio', async (req, res, next) => {
+  try {
+    const userStocks = await req.user.getStocks();
+    let uniqueStocks = {};
+
+    userStocks.forEach(stock => {
+      if (uniqueStocks[stock.dataValues.ticker]) {
+        let newQuant =
+          uniqueStocks[stock.dataValues.ticker].quantity +
+          stock.dataValues.quantity;
+        let newValue = { quantity: newQuant };
+        uniqueStocks[stock.dataValues.ticker] = newValue;
+      } else {
+        uniqueStocks[stock.dataValues.ticker] = {
+          quantity: stock.dataValues.quantity,
+        };
+      }
+    });
+    console.log(uniqueStocks);
   } catch (err) {
     next(err);
   }

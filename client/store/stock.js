@@ -1,6 +1,7 @@
 import axios from 'axios';
 import history from '../history';
 import { updateBalance } from './index';
+import alphavantageCall from '../../secrets';
 
 const BUY_STOCK = 'BUY_STOCK';
 const INCORRECT_TICKER = 'INCORRECT_TICKER';
@@ -46,9 +47,7 @@ const tooManyCalls = () => {
 //thunks
 export const buyingStock = (stock, quantity) => async dispatch => {
   try {
-    const { data } = await axios.get(
-      `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stock}&apikey=O1X1GO5YCEATSYLF`
-    );
+    const { data } = await axios.get(alphavantageCall(stock));
     // const data = {
     //   'Global Quote': {
     //     '01. symbol': 'MSFT',
