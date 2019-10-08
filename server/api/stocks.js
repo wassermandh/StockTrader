@@ -37,6 +37,16 @@ router.get('/portfolio', async (req, res, next) => {
   }
 });
 
+const trendDirection = trend => {
+  if (trend < 0) {
+    return 'neg';
+  } else if (trend > 0) {
+    return 'pos';
+  } else {
+    return 'neutral';
+  }
+};
+
 router.post('/', async (req, res, next) => {
   try {
     if (req.body.data.Note) {
@@ -71,6 +81,7 @@ router.post('/', async (req, res, next) => {
     newStock.dataValues.totalCost = totalCost;
     newStock.dataValues.openPrice = openPrice;
     newStock.dataValues.trend = trend;
+    newStock.dataValues.performance = trendDirection(trend);
     newStock.dataValues.latestPrice = stockPrice;
     res.send(newStock);
   } catch (err) {

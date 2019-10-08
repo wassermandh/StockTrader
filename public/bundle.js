@@ -350,10 +350,7 @@ function (_Component) {
   _createClass(Porfolio, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      if (Object.keys(this.props.portfolio).length === 0) {
-        console.log('hi');
-        this.props.getPortfolio();
-      }
+      this.props.getPortfolio();
     }
   }, {
     key: "render",
@@ -362,7 +359,8 @@ function (_Component) {
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Portfolio"), Object.keys(this.props.portfolio).length > 0 ? Object.keys(this.props.portfolio).map(function (stock) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          key: stock
+          key: stock,
+          className: _this.props.portfolio[stock].performance
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, stock, " - ", _this.props.portfolio[stock].quantity), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, _this.props.portfolio[stock].quantity * _this.props.portfolio[stock].latestPrice));
       }) : '', this.props.grabbingPortfolio ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Loading...") : '', this.props.loadingMoreStocks.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.props.loadingMoreStocks) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Cash - ", this.props.user.balance), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_stock_purchase_form__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
     }
@@ -1092,6 +1090,16 @@ var gettingTransactions = function gettingTransactions() {
 //   }
 // };
 
+var trendDirection = function trendDirection(trend) {
+  if (trend < 0) {
+    return 'neg';
+  } else if (trend > 0) {
+    return 'pos';
+  } else {
+    return 'neutral';
+  }
+};
+
 var gettingPortfolio = function gettingPortfolio() {
   return (
     /*#__PURE__*/
@@ -1112,28 +1120,35 @@ var gettingPortfolio = function gettingPortfolio() {
               case 3:
                 _ref6 = _context3.sent;
                 uniqueStocks = _ref6.data;
+                console.log(uniqueStocks);
                 tickers = Object.keys(uniqueStocks);
                 i = 0;
 
-              case 7:
+              case 8:
                 if (!(i < tickers.length)) {
-                  _context3.next = 24;
+                  _context3.next = 30;
                   break;
                 }
 
                 stock = tickers[i];
-                _context3.next = 11;
+                _context3.next = 12;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(_secrets__WEBPACK_IMPORTED_MODULE_3___default()(stock));
 
-              case 11:
+              case 12:
                 _ref7 = _context3.sent;
                 data = _ref7.data;
 
-                if (data.Note) {
-                  dispatch(portfolioAPIThrottle());
-                  setTimeout(function () {}, 60000);
+                if (!data.Note) {
+                  _context3.next = 19;
+                  break;
                 }
 
+                dispatch(portfolioAPIThrottle());
+                setTimeout(function () {}, 60000);
+                i--;
+                return _context3.abrupt("continue", 27);
+
+              case 19:
                 ticker = data['Global Quote']['01. symbol'];
                 latestPrice = Number(data['Global Quote']['05. price']);
                 openPrice = Number(data['Global Quote']['02. open']);
@@ -1141,28 +1156,29 @@ var gettingPortfolio = function gettingPortfolio() {
                 uniqueStocks[ticker].latestPrice = latestPrice;
                 uniqueStocks[ticker].openPrice = openPrice;
                 uniqueStocks[ticker].trend = trend;
-
-              case 21:
-                i++;
-                _context3.next = 7;
-                break;
-
-              case 24:
-                dispatch(gotPorfolio(uniqueStocks));
-                _context3.next = 30;
-                break;
+                uniqueStocks[ticker].performance = trendDirection(trend);
 
               case 27:
-                _context3.prev = 27;
+                i++;
+                _context3.next = 8;
+                break;
+
+              case 30:
+                dispatch(gotPorfolio(uniqueStocks));
+                _context3.next = 36;
+                break;
+
+              case 33:
+                _context3.prev = 33;
                 _context3.t0 = _context3["catch"](0);
                 console.log(_context3.t0);
 
-              case 30:
+              case 36:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 27]]);
+        }, _callee3, null, [[0, 33]]);
       }));
 
       return function (_x3) {
@@ -1191,7 +1207,7 @@ var gettingPortfolio = function gettingPortfolio() {
       });
 
     case ADD_TO_PORTFOLIO:
-      var newPortfolio = state.portfolio;
+      var newPortfolio = _objectSpread({}, state.portfolio);
 
       if (newPortfolio[action.stock.ticker]) {
         newPortfolio[action.stock.ticker].quantity += action.stock.quantity;
@@ -1215,7 +1231,7 @@ var gettingPortfolio = function gettingPortfolio() {
 
     case PORTFOLIO_API_THROTTLE:
       return _objectSpread({}, state, {
-        loadingMoreStocks: 'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and try again for updated portfolio information',
+        loadingMoreStocks: 'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute for more stocks to load',
         grabbingPortfolio: false
       });
 

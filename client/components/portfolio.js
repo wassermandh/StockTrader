@@ -10,10 +10,7 @@ class Porfolio extends Component {
     // this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount() {
-    if (Object.keys(this.props.portfolio).length === 0) {
-      console.log('hi');
-      this.props.getPortfolio();
-    }
+    this.props.getPortfolio();
   }
   render() {
     return (
@@ -26,7 +23,10 @@ class Porfolio extends Component {
           {Object.keys(this.props.portfolio).length > 0
             ? Object.keys(this.props.portfolio).map(stock => {
                 return (
-                  <div key={stock}>
+                  <div
+                    key={stock}
+                    className={this.props.portfolio[stock].performance}
+                  >
                     <strong>
                       {stock} - {this.props.portfolio[stock].quantity}
                     </strong>

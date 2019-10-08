@@ -125,10 +125,20 @@ export const gettingTransactions = () => async dispatch => {
 //     console.log(err);
 //   }
 // };
+const trendDirection = trend => {
+  if (trend < 0) {
+    return 'neg';
+  } else if (trend > 0) {
+    return 'pos';
+  } else {
+    return 'neutral';
+  }
+};
 
 export const gettingPortfolio = () => async dispatch => {
   try {
     let { data: uniqueStocks } = await axios.get('/api/stocks/portfolio');
+    console.log(uniqueStocks);
     const tickers = Object.keys(uniqueStocks);
 
     for (let i = 0; i < tickers.length; i++) {
@@ -137,6 +147,8 @@ export const gettingPortfolio = () => async dispatch => {
       if (data.Note) {
         dispatch(portfolioAPIThrottle());
         setTimeout(() => {}, 60000);
+        i--;
+        continue;
       }
       const ticker = data['Global Quote']['01. symbol'];
       const latestPrice = Number(data['Global Quote']['05. price']);
@@ -145,7 +157,9 @@ export const gettingPortfolio = () => async dispatch => {
       uniqueStocks[ticker].latestPrice = latestPrice;
       uniqueStocks[ticker].openPrice = openPrice;
       uniqueStocks[ticker].trend = trend;
+      uniqueStocks[ticker].performance = trendDirection(trend);
     }
+
     dispatch(gotPorfolio(uniqueStocks));
   } catch (err) {
     console.log(err);
@@ -166,7 +180,7 @@ export default function(state = defaultStocks, action) {
     case INCORRECT_TICKER:
       return { ...state, error: 'Ticket is incorrect' };
     case ADD_TO_PORTFOLIO:
-      let newPortfolio = state.portfolio;
+      let newPortfolio = { ...state.portfolio };
       if (newPortfolio[action.stock.ticker]) {
         newPortfolio[action.stock.ticker].quantity += action.stock.quantity;
       } else {
@@ -181,7 +195,7 @@ export default function(state = defaultStocks, action) {
       return {
         ...state,
         loadingMoreStocks:
-          'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and try again for updated portfolio information',
+          'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute for more stocks to load',
         grabbingPortfolio: false,
       };
     case GOT_PORTFOLIO:
