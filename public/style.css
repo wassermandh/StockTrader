@@ -118,3 +118,10 @@ html {
   height: 20px;
   margin-bottom: 5px;
 }
+
+.portfolioStock {
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  font-size: 25px;
+}

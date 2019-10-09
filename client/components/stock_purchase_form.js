@@ -50,7 +50,9 @@ class StockPurchaseForm extends Component {
                 required
               />
             </div>
-            <input id="stockSubmit" type="submit" value="Submit" />
+            <button id="stockSubmit" type="submit" value="Submit">
+              Purchase
+            </button>
           </form>
         </div>
         <div>{this.props.error.length ? <p>{this.props.error}</p> : ''}</div>

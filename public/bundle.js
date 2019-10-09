@@ -416,17 +416,16 @@ function (_Component) {
         className: "sectionHeader"
       }, "Portfolio"), Object.keys(this.props.portfolio).length > 0 ? Object.keys(this.props.portfolio).map(function (stock) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "portfolioStock ".concat(_this.props.portfolio[stock].performance),
           key: stock
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", {
-          className: _this.props.portfolio[stock].performance
-        }, stock, " - ", _this.props.portfolio[stock].quantity), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, _this.props.portfolio[stock].quantity * _this.props.portfolio[stock].latestPrice));
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, stock, " - ", _this.props.portfolio[stock].quantity, " shares")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Worth $", _this.props.portfolio[stock].quantity * _this.props.portfolio[stock].latestPrice));
       }) : '', this.props.grabbingPortfolio ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Loading...") : '', this.props.loadingMoreStocks.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.props.loadingMoreStocks) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         id: "portfolioVerticalLine"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "stockPurchaseForm"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
         id: "cashHeader"
-      }, "Cash - $", this.props.user.balance), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_stock_purchase_form__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
+      }, "Balance Remaining - $", this.props.user.balance), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_stock_purchase_form__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
     }
   }]);
 
@@ -545,11 +544,11 @@ function (_Component) {
         min: "0",
         onChange: this.handleChange,
         required: true
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         id: "stockSubmit",
         type: "submit",
         value: "Submit"
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.error.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, this.props.error) : ''));
+      }, "Purchase"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.error.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, this.props.error) : ''));
     }
   }]);
 
@@ -643,7 +642,7 @@ function (_Component) {
       }, this.props.stocks.map(function (stock) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: stock.id
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "BUY (", stock.ticker, ") - ", stock.quantity, " shares @ $", stock.priceAtPurchase), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "BUY (", stock.ticker, ") - ", stock.quantity, " shares @ $", stock.priceAtPurchase, ' ', "each"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
       })));
     }
   }]);

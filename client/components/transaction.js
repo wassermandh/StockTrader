@@ -25,7 +25,8 @@ class Transactions extends Component {
                 <strong>
                   BUY ({stock.ticker}) - {stock.quantity} shares @ ${
                     stock.priceAtPurchase
-                  }
+                  }{' '}
+                  each
                 </strong>
                 <hr />
               </div>

@@ -19,12 +19,19 @@ class Porfolio extends Component {
           {Object.keys(this.props.portfolio).length > 0
             ? Object.keys(this.props.portfolio).map(stock => {
                 return (
-                  <div key={stock}>
-                    <strong className={this.props.portfolio[stock].performance}>
-                      {stock} - {this.props.portfolio[stock].quantity}
-                    </strong>
+                  <div
+                    className={`portfolioStock ${
+                      this.props.portfolio[stock].performance
+                    }`}
+                    key={stock}
+                  >
                     <span>
-                      {this.props.portfolio[stock].quantity *
+                      <strong>
+                        {stock} - {this.props.portfolio[stock].quantity} shares
+                      </strong>
+                    </span>
+                    <span>
+                      Worth ${this.props.portfolio[stock].quantity *
                         this.props.portfolio[stock].latestPrice}
                     </span>
                   </div>
@@ -40,7 +47,9 @@ class Porfolio extends Component {
         </div>
         <span id="portfolioVerticalLine" />
         <div id="stockPurchaseForm">
-          <h3 id="cashHeader">Cash - ${this.props.user.balance}</h3>
+          <h3 id="cashHeader">
+            Balance Remaining - ${this.props.user.balance}
+          </h3>
           <StockPurchaseForm />
         </div>
       </div>
