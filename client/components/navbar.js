@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logout, clearError } from '../store';
+import { logout, clearError, logoutClearState } from '../store';
 
 const Navbar = ({ handleClick, clearError, isLoggedIn, name }) => (
   <div>
@@ -52,6 +52,7 @@ const mapDispatch = dispatch => {
   return {
     handleClick() {
       dispatch(logout());
+      dispatch(logoutClearState());
     },
     clearError() {
       dispatch(clearError());

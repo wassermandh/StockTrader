@@ -331,6 +331,7 @@ var mapDispatch = function mapDispatch(dispatch) {
   return {
     handleClick: function handleClick() {
       dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_4__["logout"])());
+      dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_4__["logoutClearState"])());
     },
     clearError: function clearError() {
       dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_4__["clearError"])());
@@ -876,7 +877,7 @@ Routes.propTypes = {
 /*!*******************************!*\
   !*** ./client/store/index.js ***!
   \*******************************/
-/*! exports provided: default, updateBalance, clearError, me, auth, logout, apiCallHelper, buyingStock, gettingTransactions, gettingPortfolio */
+/*! exports provided: default, updateBalance, clearError, me, auth, logout, logoutClearState, apiCallHelper, buyingStock, gettingTransactions, gettingPortfolio */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -898,6 +899,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "auth", function() { return _user__WEBPACK_IMPORTED_MODULE_4__["auth"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "logout", function() { return _user__WEBPACK_IMPORTED_MODULE_4__["logout"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "logoutClearState", function() { return _stock__WEBPACK_IMPORTED_MODULE_5__["logoutClearState"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "apiCallHelper", function() { return _stock__WEBPACK_IMPORTED_MODULE_5__["apiCallHelper"]; });
 
@@ -931,12 +934,13 @@ var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, m
 /*!*******************************!*\
   !*** ./client/store/stock.js ***!
   \*******************************/
-/*! exports provided: apiCallHelper, buyingStock, gettingTransactions, gettingPortfolio, default */
+/*! exports provided: logoutClearState, apiCallHelper, buyingStock, gettingTransactions, gettingPortfolio, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "apiCallHelper", function() { return apiCallHelper; });
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "logoutClearState", function() { return logoutClearState; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "apiCallHelper", function() { return apiCallHelper; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "buyingStock", function() { return buyingStock; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gettingTransactions", function() { return gettingTransactions; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gettingPortfolio", function() { return gettingPortfolio; });
@@ -977,6 +981,7 @@ var PORTFOLIO_API_THROTTLE = 'PORTFOLIO_API_THROTTLE';
 var TOO_MANY_CALLS = 'TOO_MANY_CALLS';
 var ADD_TO_PORTFOLIO = 'ADD_TO_PORTFOLIO';
 var IS_PURCHASING = 'IS_PURCHASING';
+var LOGOUT_CLEAR_STATE = 'LOGOUT_CLEAR';
 var defaultStocks = {
   stocks: [],
   error: '',
@@ -993,6 +998,12 @@ var buyStock = function buyStock(stock) {
   return {
     type: BUY_STOCK,
     stock: stock
+  };
+};
+
+var logoutClearState = function logoutClearState() {
+  return {
+    type: LOGOUT_CLEAR_STATE
   };
 };
 
@@ -1405,6 +1416,19 @@ var gettingPortfolio = function gettingPortfolio() {
         purchasing: 'Attempting to purchase...',
         error: ''
       });
+
+    case LOGOUT_CLEAR_STATE:
+      return {
+        stocks: [],
+        error: '',
+        portfolioThrottle: '',
+        portfolio: {
+          totalCost: 0,
+          stocks: []
+        },
+        grabbingPortfolio: true,
+        purchasing: ''
+      };
 
     default:
       return state;

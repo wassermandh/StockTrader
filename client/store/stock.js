@@ -12,6 +12,7 @@ const PORTFOLIO_API_THROTTLE = 'PORTFOLIO_API_THROTTLE';
 const TOO_MANY_CALLS = 'TOO_MANY_CALLS';
 const ADD_TO_PORTFOLIO = 'ADD_TO_PORTFOLIO';
 const IS_PURCHASING = 'IS_PURCHASING';
+const LOGOUT_CLEAR_STATE = 'LOGOUT_CLEAR';
 
 const defaultStocks = {
   stocks: [],
@@ -27,6 +28,12 @@ const buyStock = stock => {
   return {
     type: BUY_STOCK,
     stock,
+  };
+};
+
+export const logoutClearState = () => {
+  return {
+    type: LOGOUT_CLEAR_STATE,
   };
 };
 
@@ -253,6 +260,15 @@ export default function(state = defaultStocks, action) {
         ...state,
         purchasing: 'Attempting to purchase...',
         error: '',
+      };
+    case LOGOUT_CLEAR_STATE:
+      return {
+        stocks: [],
+        error: '',
+        portfolioThrottle: '',
+        portfolio: { totalCost: 0, stocks: [] },
+        grabbingPortfolio: true,
+        purchasing: '',
       };
     default:
       return state;
