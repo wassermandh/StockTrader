@@ -28,8 +28,13 @@ const Navbar = ({ handleClick, isLoggedIn, name }) => (
         </div>
       ) : (
         <div id="signedOutNav">
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
+          <Link className="navItem" to="/login">
+            Login
+          </Link>
+          <span className="verticalLine" />
+          <Link className="navItem" to="/signup">
+            Sign Up
+          </Link>
         </div>
       )}
     </nav>

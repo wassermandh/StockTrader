@@ -21,3 +21,41 @@
 .navItem {
   padding: 5px;
 }
+
+html {
+  font-family: Lato, Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+#authFormContainer {
+  width: 500px;
+  height: 300px;
+  margin: auto;
+  border: solid;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+input {
+  width: 90%;
+  margin: 10px;
+  padding: 5px;
+}
+
+#loginButton {
+  text-align: center;
+  margin: 10px;
+}
+
+#loginHeader {
+  text-align: center;
+}
+
+.formElement {
+  text-align: center;
+}
+
+button[type='submit'] {
+  width: 6em;
+  height: 3em;
+}
