@@ -11,6 +11,7 @@ const GOT_PORTFOLIO = 'GOT_PORTFOLIO';
 const PORTFOLIO_API_THROTTLE = 'PORTFOLIO_API_THROTTLE';
 const TOO_MANY_CALLS = 'TOO_MANY_CALLS';
 const ADD_TO_PORTFOLIO = 'ADD_TO_PORTFOLIO';
+const IS_PURCHASING = 'IS_PURCHASING';
 
 const defaultStocks = {
   stocks: [],
@@ -18,6 +19,7 @@ const defaultStocks = {
   loadingMoreStocks: '',
   portfolio: { totalCost: 0, stocks: [] },
   grabbingPortfolio: true,
+  purchasing: '',
 };
 
 //action creators
@@ -25,6 +27,12 @@ const buyStock = stock => {
   return {
     type: BUY_STOCK,
     stock,
+  };
+};
+
+const isPurchasing = () => {
+  return {
+    type: IS_PURCHASING,
   };
 };
 
@@ -96,6 +104,7 @@ export const apiCallHelper = async stock => {
 //thunks
 export const buyingStock = (stock, quantity) => async dispatch => {
   try {
+    dispatch(isPurchasing());
     let data = await apiCallHelper(stock);
     data = data.data;
     if (data['Error Message']) {
@@ -193,11 +202,12 @@ export default function(state = defaultStocks, action) {
         ...state,
         stocks: [...state.stocks, action.stock],
         error: '',
+        purchasing: 'Successfully Purchased!',
         loadingMoreStocks: '',
         portfolioRefreshThrottle: '',
       };
     case INCORRECT_TICKER:
-      return { ...state, error: 'Ticket is incorrect' };
+      return { ...state, error: 'Ticker is incorrect', purchasing: '' };
     case ADD_TO_PORTFOLIO:
       let newPortfolio = { ...state.portfolio };
       if (newPortfolio.stocks[action.stock.ticker]) {
@@ -212,7 +222,11 @@ export default function(state = defaultStocks, action) {
       newPortfolio.totalCost += costToAdd;
       return { ...state, portfolio: newPortfolio };
     case BALANCE_TOO_LOW:
-      return { ...state, error: 'Your balance is too low to purchase this' };
+      return {
+        ...state,
+        error: 'Your balance is too low to purchase this',
+        purchasing: '',
+      };
     case GOT_TRANSACTIONS:
       return { ...state, stocks: action.stocks };
     case PORTFOLIO_API_THROTTLE:
@@ -234,6 +248,13 @@ export default function(state = defaultStocks, action) {
         ...state,
         error:
           'Too many calls have been made to the API. Please try again in one minute',
+        purchasing: '',
+      };
+    case IS_PURCHASING:
+      return {
+        ...state,
+        purchasing: 'Attempting to purchase...',
+        error: '',
       };
     default:
       return state;

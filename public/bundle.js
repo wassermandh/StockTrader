@@ -553,7 +553,9 @@ function (_Component) {
         value: "Submit"
       }, "Purchase"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.error.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
         id: "stockPurchaseError"
-      }, this.props.error) : ''));
+      }, this.props.error) : '', this.props.purchasing.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        id: "attemptingToPurchase"
+      }, this.props.purchasing) : ''));
     }
   }]);
 
@@ -562,7 +564,8 @@ function (_Component) {
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    error: state.stock.error
+    error: state.stock.error,
+    purchasing: state.stock.purchasing
   };
 };
 
@@ -973,6 +976,7 @@ var GOT_PORTFOLIO = 'GOT_PORTFOLIO';
 var PORTFOLIO_API_THROTTLE = 'PORTFOLIO_API_THROTTLE';
 var TOO_MANY_CALLS = 'TOO_MANY_CALLS';
 var ADD_TO_PORTFOLIO = 'ADD_TO_PORTFOLIO';
+var IS_PURCHASING = 'IS_PURCHASING';
 var defaultStocks = {
   stocks: [],
   error: '',
@@ -981,13 +985,20 @@ var defaultStocks = {
     totalCost: 0,
     stocks: []
   },
-  grabbingPortfolio: true
+  grabbingPortfolio: true,
+  purchasing: ''
 }; //action creators
 
 var buyStock = function buyStock(stock) {
   return {
     type: BUY_STOCK,
     stock: stock
+  };
+};
+
+var isPurchasing = function isPurchasing() {
+  return {
+    type: IS_PURCHASING
   };
 };
 
@@ -1107,41 +1118,42 @@ var buyingStock = function buyingStock(stock, quantity) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
-                _context2.next = 3;
+                dispatch(isPurchasing());
+                _context2.next = 4;
                 return apiCallHelper(stock);
 
-              case 3:
+              case 4:
                 data = _context2.sent;
                 data = data.data;
 
                 if (!data['Error Message']) {
-                  _context2.next = 9;
+                  _context2.next = 10;
                   break;
                 }
 
                 dispatch(incorrectTicker());
-                _context2.next = 15;
+                _context2.next = 16;
                 break;
 
-              case 9:
-                _context2.next = 11;
+              case 10:
+                _context2.next = 12;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/stocks/', {
                   data: data,
                   quantity: quantity
                 });
 
-              case 11:
+              case 12:
                 createdStock = _context2.sent;
                 dispatch(buyStock(createdStock.data));
                 dispatch(addToPortfolio(createdStock.data));
                 dispatch(Object(_index__WEBPACK_IMPORTED_MODULE_2__["updateBalance"])(createdStock.data.totalCost));
 
-              case 15:
-                _context2.next = 21;
+              case 16:
+                _context2.next = 22;
                 break;
 
-              case 17:
-                _context2.prev = 17;
+              case 18:
+                _context2.prev = 18;
                 _context2.t0 = _context2["catch"](0);
                 console.log(_context2.t0);
 
@@ -1151,12 +1163,12 @@ var buyingStock = function buyingStock(stock, quantity) {
                   dispatch(tooManyCalls());
                 }
 
-              case 21:
+              case 22:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 17]]);
+        }, _callee2, null, [[0, 18]]);
       }));
 
       return function (_x2) {
@@ -1329,13 +1341,15 @@ var gettingPortfolio = function gettingPortfolio() {
       return _objectSpread({}, state, {
         stocks: [].concat(_toConsumableArray(state.stocks), [action.stock]),
         error: '',
+        purchasing: 'Successfully Purchased!',
         loadingMoreStocks: '',
         portfolioRefreshThrottle: ''
       });
 
     case INCORRECT_TICKER:
       return _objectSpread({}, state, {
-        error: 'Ticket is incorrect'
+        error: 'Ticker is incorrect',
+        purchasing: ''
       });
 
     case ADD_TO_PORTFOLIO:
@@ -1355,7 +1369,8 @@ var gettingPortfolio = function gettingPortfolio() {
 
     case BALANCE_TOO_LOW:
       return _objectSpread({}, state, {
-        error: 'Your balance is too low to purchase this'
+        error: 'Your balance is too low to purchase this',
+        purchasing: ''
       });
 
     case GOT_TRANSACTIONS:
@@ -1381,7 +1396,14 @@ var gettingPortfolio = function gettingPortfolio() {
 
     case TOO_MANY_CALLS:
       return _objectSpread({}, state, {
-        error: 'Too many calls have been made to the API. Please try again in one minute'
+        error: 'Too many calls have been made to the API. Please try again in one minute',
+        purchasing: ''
+      });
+
+    case IS_PURCHASING:
+      return _objectSpread({}, state, {
+        purchasing: 'Attempting to purchase...',
+        error: ''
       });
 
     default:

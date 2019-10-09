@@ -61,6 +61,11 @@ class StockPurchaseForm extends Component {
           ) : (
             ''
           )}
+          {this.props.purchasing.length ? (
+            <p id="attemptingToPurchase">{this.props.purchasing}</p>
+          ) : (
+            ''
+          )}
         </div>
       </div>
     );
@@ -70,6 +75,7 @@ class StockPurchaseForm extends Component {
 const mapStateToProps = state => {
   return {
     error: state.stock.error,
+    purchasing: state.stock.purchasing,
   };
 };
 

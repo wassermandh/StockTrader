@@ -139,3 +139,7 @@ html {
 #stockPurchaseError {
   color: red;
 }
+
+#attemptingToPurchase {
+  color: green;
+}
