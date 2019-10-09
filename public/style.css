@@ -9,3 +9,15 @@
 .neutral {
   color: grey;
 }
+
+#welcomeNav {
+  text-align: center;
+}
+
+.verticalLine {
+  border-left: 1px solid black;
+}
+
+.navItem {
+  padding: 5px;
+}
