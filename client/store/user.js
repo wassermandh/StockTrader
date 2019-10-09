@@ -4,6 +4,7 @@ import history from '../history';
 const GET_USER = 'GET_USER';
 const REMOVE_USER = 'REMOVE_USER';
 const UPDATE_BALANCE = 'UPDATE_BALANCE';
+const CLEAR_ERROR = 'CLEAR_ERROR';
 
 const defaultUser = {};
 
@@ -14,6 +15,11 @@ export const updateBalance = totalCost => {
   return {
     type: UPDATE_BALANCE,
     totalCost,
+  };
+};
+export const clearError = () => {
+  return {
+    type: CLEAR_ERROR,
   };
 };
 
@@ -61,6 +67,8 @@ export default function(state = defaultUser, action) {
       return action.user;
     case REMOVE_USER:
       return defaultUser;
+    case CLEAR_ERROR:
+      return { ...state, error: '' };
     case UPDATE_BALANCE:
       let newBalance = state.balance - action.totalCost;
       return { ...state, balance: newBalance };

@@ -176,7 +176,9 @@ var AuthForm = function AuthForm(props) {
     id: "loginButton"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "submit"
-  }, displayName)), error && error.response && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, " ", error.response.data, " ")));
+  }, displayName)), error && error.response && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "error"
+  }, " ", error.response.data, " ")));
 };
 
 var mapLogin = function mapLogin(state) {
@@ -278,6 +280,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var Navbar = function Navbar(_ref) {
   var handleClick = _ref.handleClick,
+      clearError = _ref.clearError,
       isLoggedIn = _ref.isLoggedIn,
       name = _ref.name;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -301,11 +304,13 @@ var Navbar = function Navbar(_ref) {
   }, "Transactions"))) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "signedOutNav"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+    onClick: clearError,
     className: "navItem",
     to: "/login"
   }, "Login"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "verticalLine"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+    onClick: clearError,
     className: "navItem",
     to: "/signup"
   }, "Sign Up"))));
@@ -322,6 +327,9 @@ var mapDispatch = function mapDispatch(dispatch) {
   return {
     handleClick: function handleClick() {
       dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_4__["logout"])());
+    },
+    clearError: function clearError() {
+      dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_4__["clearError"])());
     }
   };
 };
@@ -834,7 +842,7 @@ Routes.propTypes = {
 /*!*******************************!*\
   !*** ./client/store/index.js ***!
   \*******************************/
-/*! exports provided: default, updateBalance, me, auth, logout, buyingStock, gettingTransactions, gettingPortfolio */
+/*! exports provided: default, updateBalance, clearError, me, auth, logout, buyingStock, gettingTransactions, gettingPortfolio */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -848,6 +856,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./user */ "./client/store/user.js");
 /* harmony import */ var _stock__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./stock */ "./client/store/stock.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "updateBalance", function() { return _user__WEBPACK_IMPORTED_MODULE_4__["updateBalance"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "clearError", function() { return _user__WEBPACK_IMPORTED_MODULE_4__["clearError"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "me", function() { return _user__WEBPACK_IMPORTED_MODULE_4__["me"]; });
 
@@ -1285,12 +1295,13 @@ var gettingPortfolio = function gettingPortfolio() {
 /*!******************************!*\
   !*** ./client/store/user.js ***!
   \******************************/
-/*! exports provided: updateBalance, me, auth, logout, default */
+/*! exports provided: updateBalance, clearError, me, auth, logout, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateBalance", function() { return updateBalance; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearError", function() { return clearError; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "me", function() { return me; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "auth", function() { return auth; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "logout", function() { return logout; });
@@ -1312,6 +1323,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var GET_USER = 'GET_USER';
 var REMOVE_USER = 'REMOVE_USER';
 var UPDATE_BALANCE = 'UPDATE_BALANCE';
+var CLEAR_ERROR = 'CLEAR_ERROR';
 var defaultUser = {}; //action creators
 
 var getUser = function getUser(user) {
@@ -1331,6 +1343,11 @@ var updateBalance = function updateBalance(totalCost) {
   return {
     type: UPDATE_BALANCE,
     totalCost: totalCost
+  };
+};
+var clearError = function clearError() {
+  return {
+    type: CLEAR_ERROR
   };
 }; //thunks
 
@@ -1480,6 +1497,11 @@ var logout = function logout() {
 
     case REMOVE_USER:
       return defaultUser;
+
+    case CLEAR_ERROR:
+      return _objectSpread({}, state, {
+        error: ''
+      });
 
     case UPDATE_BALANCE:
       var newBalance = state.balance - action.totalCost;

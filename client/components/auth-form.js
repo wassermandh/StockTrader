@@ -5,8 +5,7 @@ import { auth } from '../store';
 
 //component
 const AuthForm = props => {
-  const { name, displayName, handleSubmit, error } = props;
-
+  let { name, displayName, handleSubmit, error } = props;
   return (
     <div id="authFormContainer">
       <h3 id="loginHeader">{name[0].toUpperCase() + name.slice(1)}</h3>
@@ -35,7 +34,8 @@ const AuthForm = props => {
         <div id="loginButton">
           <button type="submit">{displayName}</button>
         </div>
-        {error && error.response && <div> {error.response.data} </div>}
+        {error &&
+          error.response && <div id="error"> {error.response.data} </div>}
       </form>
     </div>
   );
