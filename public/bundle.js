@@ -1361,7 +1361,7 @@ var gettingPortfolio = function gettingPortfolio() {
         newPortfolio.stocks[action.stock.ticker] = action.stock;
       }
 
-      var costToAdd = newPortfolio.stocks[action.stock.ticker].quantity * newPortfolio.stocks[action.stock.ticker].latestPrice;
+      var costToAdd = action.stock.latestPrice * action.stock.quantity;
       newPortfolio.totalCost += costToAdd;
       return _objectSpread({}, state, {
         portfolio: newPortfolio

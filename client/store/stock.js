@@ -216,9 +216,7 @@ export default function(state = defaultStocks, action) {
       } else {
         newPortfolio.stocks[action.stock.ticker] = action.stock;
       }
-      let costToAdd =
-        newPortfolio.stocks[action.stock.ticker].quantity *
-        newPortfolio.stocks[action.stock.ticker].latestPrice;
+      let costToAdd = action.stock.latestPrice * action.stock.quantity;
       newPortfolio.totalCost += costToAdd;
       return { ...state, portfolio: newPortfolio };
     case BALANCE_TOO_LOW:
