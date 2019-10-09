@@ -11,7 +11,8 @@
     "start-server":
       "nodemon server -e html,js,scss --ignore public --ignore client",
     "build-client": "webpack",
-    "build-client-watch": "webpack -w"
+    "build-client-watch": "webpack -w",
+    "start": "node server"
   },
   "repository": {
     "type": "git",
