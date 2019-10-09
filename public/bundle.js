@@ -870,7 +870,7 @@ Routes.propTypes = {
 /*!*******************************!*\
   !*** ./client/store/index.js ***!
   \*******************************/
-/*! exports provided: default, updateBalance, clearError, me, auth, logout, buyingStock, gettingTransactions, gettingPortfolio */
+/*! exports provided: default, updateBalance, clearError, me, auth, logout, apiCallHelper, buyingStock, gettingTransactions, gettingPortfolio */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -892,6 +892,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "auth", function() { return _user__WEBPACK_IMPORTED_MODULE_4__["auth"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "logout", function() { return _user__WEBPACK_IMPORTED_MODULE_4__["logout"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "apiCallHelper", function() { return _stock__WEBPACK_IMPORTED_MODULE_5__["apiCallHelper"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "buyingStock", function() { return _stock__WEBPACK_IMPORTED_MODULE_5__["buyingStock"]; });
 
@@ -923,11 +925,12 @@ var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, m
 /*!*******************************!*\
   !*** ./client/store/stock.js ***!
   \*******************************/
-/*! exports provided: buyingStock, gettingTransactions, gettingPortfolio, default */
+/*! exports provided: apiCallHelper, buyingStock, gettingTransactions, gettingPortfolio, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "apiCallHelper", function() { return apiCallHelper; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "buyingStock", function() { return buyingStock; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gettingTransactions", function() { return gettingTransactions; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gettingPortfolio", function() { return gettingPortfolio; });
@@ -1030,77 +1033,131 @@ var portfolioAPIThrottle = function portfolioAPIThrottle() {
   return {
     type: PORTFOLIO_API_THROTTLE
   };
-}; //thunks
+};
 
+var apiCallHelper =
+/*#__PURE__*/
+function () {
+  var _ref = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee(stock) {
+    var dataToReturn;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            console.log(process.env.alphaVantageKey);
+            _context.prev = 1;
+
+            if (!process.env.alphaVantageKey) {
+              _context.next = 8;
+              break;
+            }
+
+            _context.next = 5;
+            return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(Object(_secrets__WEBPACK_IMPORTED_MODULE_3__["alphavantageCall"])(stock, process.env.alphaVantageKey));
+
+          case 5:
+            dataToReturn = _context.sent;
+            _context.next = 11;
+            break;
+
+          case 8:
+            _context.next = 10;
+            return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(Object(_secrets__WEBPACK_IMPORTED_MODULE_3__["alphavantageCall"])(stock, _secrets__WEBPACK_IMPORTED_MODULE_3__["apiKey"]));
+
+          case 10:
+            dataToReturn = _context.sent;
+
+          case 11:
+            console.log(dataToReturn);
+            return _context.abrupt("return", dataToReturn);
+
+          case 15:
+            _context.prev = 15;
+            _context.t0 = _context["catch"](1);
+            console.log(_context.t0);
+
+          case 18:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, null, [[1, 15]]);
+  }));
+
+  return function apiCallHelper(_x) {
+    return _ref.apply(this, arguments);
+  };
+}(); //thunks
 
 var buyingStock = function buyingStock(stock, quantity) {
   return (
     /*#__PURE__*/
     function () {
-      var _ref = _asyncToGenerator(
+      var _ref2 = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee(dispatch) {
-        var _ref2, data, createdStock;
-
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+      regeneratorRuntime.mark(function _callee2(dispatch) {
+        var data, createdStock;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
-                _context.prev = 0;
-                _context.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(_secrets__WEBPACK_IMPORTED_MODULE_3___default()(stock));
+                _context2.prev = 0;
+                _context2.next = 3;
+                return apiCallHelper(stock);
 
               case 3:
-                _ref2 = _context.sent;
-                data = _ref2.data;
+                data = _context2.sent;
+                data = data.data;
 
                 if (!data['Error Message']) {
-                  _context.next = 9;
+                  _context2.next = 9;
                   break;
                 }
 
                 dispatch(incorrectTicker());
-                _context.next = 15;
+                _context2.next = 15;
                 break;
 
               case 9:
-                _context.next = 11;
+                _context2.next = 11;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/stocks/', {
                   data: data,
                   quantity: quantity
                 });
 
               case 11:
-                createdStock = _context.sent;
+                createdStock = _context2.sent;
                 dispatch(buyStock(createdStock.data));
                 dispatch(addToPortfolio(createdStock.data));
                 dispatch(Object(_index__WEBPACK_IMPORTED_MODULE_2__["updateBalance"])(createdStock.data.totalCost));
 
               case 15:
-                _context.next = 21;
+                _context2.next = 21;
                 break;
 
               case 17:
-                _context.prev = 17;
-                _context.t0 = _context["catch"](0);
-                console.log(_context.t0);
+                _context2.prev = 17;
+                _context2.t0 = _context2["catch"](0);
+                console.log(_context2.t0);
 
-                if (_context.t0.message === 'Request failed with status code 501') {
+                if (_context2.t0.message === 'Request failed with status code 501') {
                   dispatch(balanceTooLow());
-                } else if (_context.t0.message === 'Request failed with status code 502') {
+                } else if (_context2.t0.message === 'Request failed with status code 502') {
                   dispatch(tooManyCalls());
                 }
 
               case 21:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, null, [[0, 17]]);
+        }, _callee2, null, [[0, 17]]);
       }));
 
-      return function (_x) {
-        return _ref.apply(this, arguments);
+      return function (_x2) {
+        return _ref2.apply(this, arguments);
       };
     }()
   );
@@ -1111,38 +1168,38 @@ var gettingTransactions = function gettingTransactions() {
     function () {
       var _ref3 = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee2(dispatch) {
+      regeneratorRuntime.mark(function _callee3(dispatch) {
         var _ref4, data;
 
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
-                _context2.prev = 0;
-                _context2.next = 3;
+                _context3.prev = 0;
+                _context3.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('api/stocks/transactions');
 
               case 3:
-                _ref4 = _context2.sent;
+                _ref4 = _context3.sent;
                 data = _ref4.data;
                 dispatch(gotTransactions(data));
-                _context2.next = 11;
+                _context3.next = 11;
                 break;
 
               case 8:
-                _context2.prev = 8;
-                _context2.t0 = _context2["catch"](0);
-                console.log(_context2.t0);
+                _context3.prev = 8;
+                _context3.t0 = _context3["catch"](0);
+                console.log(_context3.t0);
 
               case 11:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, null, [[0, 8]]);
+        }, _callee3, null, [[0, 8]]);
       }));
 
-      return function (_x2) {
+      return function (_x3) {
         return _ref3.apply(this, arguments);
       };
     }()
@@ -1183,20 +1240,20 @@ var gettingPortfolio = function gettingPortfolio() {
     function () {
       var _ref5 = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee3(dispatch) {
-        var totalCost, _ref6, uniqueStocks, tickers, i, stock, _ref7, data, ticker, latestPrice, openPrice, trend;
+      regeneratorRuntime.mark(function _callee4(dispatch) {
+        var totalCost, _ref6, uniqueStocks, tickers, i, stock, data, ticker, latestPrice, openPrice, trend;
 
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
-                _context3.prev = 0;
+                _context4.prev = 0;
                 totalCost = 0;
-                _context3.next = 4;
+                _context4.next = 4;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/stocks/portfolio');
 
               case 4:
-                _ref6 = _context3.sent;
+                _ref6 = _context4.sent;
                 uniqueStocks = _ref6.data;
                 console.log(uniqueStocks);
                 tickers = Object.keys(uniqueStocks);
@@ -1204,17 +1261,17 @@ var gettingPortfolio = function gettingPortfolio() {
 
               case 9:
                 if (!(i < tickers.length)) {
-                  _context3.next = 28;
+                  _context4.next = 28;
                   break;
                 }
 
                 stock = tickers[i];
-                _context3.next = 13;
-                return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(_secrets__WEBPACK_IMPORTED_MODULE_3___default()(stock));
+                _context4.next = 13;
+                return apiCallHelper(stock);
 
               case 13:
-                _ref7 = _context3.sent;
-                data = _ref7.data;
+                data = _context4.sent;
+                data = data.data;
 
                 if (data.Note) {
                   dispatch(portfolioAPIThrottle());
@@ -1232,28 +1289,28 @@ var gettingPortfolio = function gettingPortfolio() {
 
               case 25:
                 i++;
-                _context3.next = 9;
+                _context4.next = 9;
                 break;
 
               case 28:
                 dispatch(gotPorfolio(uniqueStocks, totalCost));
-                _context3.next = 34;
+                _context4.next = 34;
                 break;
 
               case 31:
-                _context3.prev = 31;
-                _context3.t0 = _context3["catch"](0);
-                console.log(_context3.t0);
+                _context4.prev = 31;
+                _context4.t0 = _context4["catch"](0);
+                console.log(_context4.t0);
 
               case 34:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3, null, [[0, 31]]);
+        }, _callee4, null, [[0, 31]]);
       }));
 
-      return function (_x3) {
+      return function (_x4) {
         return _ref5.apply(this, arguments);
       };
     }()
@@ -1328,6 +1385,7 @@ var gettingPortfolio = function gettingPortfolio() {
       return state;
   }
 });
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -52378,11 +52436,16 @@ module.exports = function(originalModule) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var alphavantageCall = function alphavantageCall(stock) {
-  return "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=".concat(stock, "&apikey=0854N4GV5GA8ZW3K");
+var apiKey = '0854N4GV5GA8ZW3K';
+
+var alphavantageCall = function alphavantageCall(stock, key) {
+  return "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=".concat(stock, "&apikey=").concat(key);
 };
 
-module.exports = alphavantageCall;
+module.exports = {
+  alphavantageCall: alphavantageCall,
+  apiKey: apiKey
+};
 
 /***/ }),
 

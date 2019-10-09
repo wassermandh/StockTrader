@@ -1,7 +1,7 @@
 import axios from 'axios';
 import history from '../history';
 import { updateBalance } from './index';
-import alphavantageCall from '../../secrets';
+import { alphavantageCall, apiKey } from '../../secrets';
 
 const BUY_STOCK = 'BUY_STOCK';
 const INCORRECT_TICKER = 'INCORRECT_TICKER';
@@ -75,10 +75,29 @@ const portfolioAPIThrottle = () => {
   };
 };
 
+export const apiCallHelper = async stock => {
+  let dataToReturn;
+  console.log(process.env.alphaVantageKey);
+  try {
+    if (process.env.alphaVantageKey) {
+      dataToReturn = await axios.get(
+        alphavantageCall(stock, process.env.alphaVantageKey)
+      );
+    } else {
+      dataToReturn = await axios.get(alphavantageCall(stock, apiKey));
+    }
+    console.log(dataToReturn);
+    return dataToReturn;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 //thunks
 export const buyingStock = (stock, quantity) => async dispatch => {
   try {
-    const { data } = await axios.get(alphavantageCall(stock));
+    let data = await apiCallHelper(stock);
+    data = data.data;
     if (data['Error Message']) {
       dispatch(incorrectTicker());
     } else {
@@ -144,7 +163,8 @@ export const gettingPortfolio = () => async dispatch => {
 
     for (let i = 0; i < tickers.length; i++) {
       let stock = tickers[i];
-      const { data } = await axios.get(alphavantageCall(stock));
+      let data = await apiCallHelper(stock);
+      data = data.data;
       if (data.Note) {
         dispatch(portfolioAPIThrottle());
       }
