@@ -18,9 +18,6 @@ class Porfolio extends Component {
       <div>
         <div>
           <h1>Portfolio</h1>
-          {/* <button type="button" onClick={this.handleClick}>
-            Click to load as many items in portfolio as API key will allow for
-          </button> */}
           {Object.keys(this.props.portfolio).length > 0
             ? Object.keys(this.props.portfolio).map(stock => {
                 return (

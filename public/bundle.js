@@ -142,6 +142,11 @@ var AuthForm = function AuthForm(props) {
     onSubmit: handleSubmit,
     name: name
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "name"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, "Name")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    name: "userName",
+    type: "text"
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "email"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, "Email")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     name: "email",
@@ -179,9 +184,10 @@ var mapDispatch = function mapDispatch(dispatch) {
     handleSubmit: function handleSubmit(evt) {
       evt.preventDefault();
       var formName = evt.target.name;
+      var name = evt.target.userName.value;
       var email = evt.target.email.value;
       var password = evt.target.password.value;
-      dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_3__["auth"])(email, password, formName));
+      dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_3__["auth"])(name, email, password, formName));
     }
   };
 };
@@ -616,20 +622,20 @@ __webpack_require__.r(__webpack_exports__);
  //component
 
 var UserHome = function UserHome(props) {
-  var email = props.email;
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Welcome, ", email)));
+  var name = props.name;
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Welcome, ", name, "!")));
 }; //container
 
 var mapState = function mapState(state) {
   return {
-    email: state.user.email
+    name: state.user.name
   };
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapState)(UserHome)); //prop types
 
 UserHome.propTypes = {
-  email: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string
+  name: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string
 };
 
 /***/ }),
@@ -1339,7 +1345,7 @@ var me = function me() {
     }()
   );
 };
-var auth = function auth(email, password, method) {
+var auth = function auth(name, email, password, method) {
   return (
     /*#__PURE__*/
     function () {
@@ -1354,6 +1360,7 @@ var auth = function auth(email, password, method) {
                 _context2.prev = 0;
                 _context2.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("api/auth/".concat(method), {
+                  name: name,
                   email: email,
                   password: password
                 });
