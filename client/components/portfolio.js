@@ -15,9 +15,12 @@ class Porfolio extends Component {
     return (
       <div className="portfolioSectionContainer">
         <div id="portfolioContainer">
-          <h1 className="sectionHeader">Portfolio</h1>
+          <h1 className="sectionHeader">
+            Portfolio (${this.props.portfolioTotal})
+          </h1>
           {Object.keys(this.props.portfolio).length > 0
             ? Object.keys(this.props.portfolio).map(stock => {
+                // if (stock === 'totalCost') return '';
                 return (
                   <div
                     className={`portfolioStock ${
@@ -60,7 +63,8 @@ class Porfolio extends Component {
 const mapStateToProps = state => {
   return {
     user: state.user,
-    portfolio: state.stock.portfolio,
+    portfolio: state.stock.portfolio.stocks,
+    portfolioTotal: state.stock.portfolio.totalCost,
     loadingMoreStocks: state.stock.loadingMoreStocks,
     grabbingPortfolio: state.stock.grabbingPortfolio,
     stocks: state.stock.stocks,

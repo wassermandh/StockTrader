@@ -16,7 +16,7 @@ const defaultStocks = {
   stocks: [],
   error: '',
   loadingMoreStocks: '',
-  portfolio: {},
+  portfolio: { totalCost: 0, stocks: [] },
   grabbingPortfolio: true,
 };
 
@@ -53,17 +53,19 @@ const balanceTooLow = () => {
   };
 };
 
-const gotPorfolio = stocks => {
+const gotPorfolio = (stocks, totalCost) => {
   return {
     type: GOT_PORTFOLIO,
     stocks,
+    totalCost,
   };
 };
 
-const gotTransactions = stocks => {
+const gotTransactions = (stocks, totalCost) => {
   return {
     type: GOT_TRANSACTIONS,
     stocks,
+    totalCost,
   };
 };
 
@@ -135,6 +137,7 @@ const trendDirection = trend => {
 
 export const gettingPortfolio = () => async dispatch => {
   try {
+    let totalCost = 0;
     let { data: uniqueStocks } = await axios.get('/api/stocks/portfolio');
     console.log(uniqueStocks);
     const tickers = Object.keys(uniqueStocks);
@@ -153,9 +156,10 @@ export const gettingPortfolio = () => async dispatch => {
       uniqueStocks[ticker].openPrice = openPrice;
       uniqueStocks[ticker].trend = trend;
       uniqueStocks[ticker].performance = trendDirection(trend);
+      totalCost +=
+        uniqueStocks[ticker].latestPrice * uniqueStocks[ticker].quantity;
     }
-
-    dispatch(gotPorfolio(uniqueStocks));
+    dispatch(gotPorfolio(uniqueStocks, totalCost));
   } catch (err) {
     console.log(err);
   }
@@ -176,11 +180,16 @@ export default function(state = defaultStocks, action) {
       return { ...state, error: 'Ticket is incorrect' };
     case ADD_TO_PORTFOLIO:
       let newPortfolio = { ...state.portfolio };
-      if (newPortfolio[action.stock.ticker]) {
-        newPortfolio[action.stock.ticker].quantity += action.stock.quantity;
+      if (newPortfolio.stocks[action.stock.ticker]) {
+        newPortfolio.stocks[action.stock.ticker].quantity +=
+          action.stock.quantity;
       } else {
-        newPortfolio[action.stock.ticker] = action.stock;
+        newPortfolio.stocks[action.stock.ticker] = action.stock;
       }
+      let costToAdd =
+        newPortfolio.stocks[action.stock.ticker].quantity *
+        newPortfolio.stocks[action.stock.ticker].latestPrice;
+      newPortfolio.totalCost += costToAdd;
       return { ...state, portfolio: newPortfolio };
     case BALANCE_TOO_LOW:
       return { ...state, error: 'Your balance is too low to purchase this' };
@@ -196,7 +205,7 @@ export default function(state = defaultStocks, action) {
     case GOT_PORTFOLIO:
       return {
         ...state,
-        portfolio: action.stocks,
+        portfolio: { stocks: action.stocks, totalCost: action.totalCost },
         loadingMoreStocks: '',
         grabbingPortfolio: false,
       };

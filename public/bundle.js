@@ -414,7 +414,8 @@ function (_Component) {
         id: "portfolioContainer"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
         className: "sectionHeader"
-      }, "Portfolio"), Object.keys(this.props.portfolio).length > 0 ? Object.keys(this.props.portfolio).map(function (stock) {
+      }, "Portfolio ($", this.props.portfolioTotal, ")"), Object.keys(this.props.portfolio).length > 0 ? Object.keys(this.props.portfolio).map(function (stock) {
+        // if (stock === 'totalCost') return '';
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "portfolioStock ".concat(_this.props.portfolio[stock].performance),
           key: stock
@@ -435,7 +436,8 @@ function (_Component) {
 var mapStateToProps = function mapStateToProps(state) {
   return {
     user: state.user,
-    portfolio: state.stock.portfolio,
+    portfolio: state.stock.portfolio.stocks,
+    portfolioTotal: state.stock.portfolio.totalCost,
     loadingMoreStocks: state.stock.loadingMoreStocks,
     grabbingPortfolio: state.stock.grabbingPortfolio,
     stocks: state.stock.stocks
@@ -969,7 +971,10 @@ var defaultStocks = {
   stocks: [],
   error: '',
   loadingMoreStocks: '',
-  portfolio: {},
+  portfolio: {
+    totalCost: 0,
+    stocks: []
+  },
   grabbingPortfolio: true
 }; //action creators
 
@@ -1005,17 +1010,19 @@ var balanceTooLow = function balanceTooLow() {
   };
 };
 
-var gotPorfolio = function gotPorfolio(stocks) {
+var gotPorfolio = function gotPorfolio(stocks, totalCost) {
   return {
     type: GOT_PORTFOLIO,
-    stocks: stocks
+    stocks: stocks,
+    totalCost: totalCost
   };
 };
 
-var gotTransactions = function gotTransactions(stocks) {
+var gotTransactions = function gotTransactions(stocks, totalCost) {
   return {
     type: GOT_TRANSACTIONS,
-    stocks: stocks
+    stocks: stocks,
+    totalCost: totalCost
   };
 };
 
@@ -1177,34 +1184,35 @@ var gettingPortfolio = function gettingPortfolio() {
       var _ref5 = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee3(dispatch) {
-        var _ref6, uniqueStocks, tickers, i, stock, _ref7, data, ticker, latestPrice, openPrice, trend;
+        var totalCost, _ref6, uniqueStocks, tickers, i, stock, _ref7, data, ticker, latestPrice, openPrice, trend;
 
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.prev = 0;
-                _context3.next = 3;
+                totalCost = 0;
+                _context3.next = 4;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/stocks/portfolio');
 
-              case 3:
+              case 4:
                 _ref6 = _context3.sent;
                 uniqueStocks = _ref6.data;
                 console.log(uniqueStocks);
                 tickers = Object.keys(uniqueStocks);
                 i = 0;
 
-              case 8:
+              case 9:
                 if (!(i < tickers.length)) {
-                  _context3.next = 26;
+                  _context3.next = 28;
                   break;
                 }
 
                 stock = tickers[i];
-                _context3.next = 12;
+                _context3.next = 13;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(_secrets__WEBPACK_IMPORTED_MODULE_3___default()(stock));
 
-              case 12:
+              case 13:
                 _ref7 = _context3.sent;
                 data = _ref7.data;
 
@@ -1220,28 +1228,29 @@ var gettingPortfolio = function gettingPortfolio() {
                 uniqueStocks[ticker].openPrice = openPrice;
                 uniqueStocks[ticker].trend = trend;
                 uniqueStocks[ticker].performance = trendDirection(trend);
+                totalCost += uniqueStocks[ticker].latestPrice * uniqueStocks[ticker].quantity;
 
-              case 23:
+              case 25:
                 i++;
-                _context3.next = 8;
+                _context3.next = 9;
                 break;
 
-              case 26:
-                dispatch(gotPorfolio(uniqueStocks));
-                _context3.next = 32;
+              case 28:
+                dispatch(gotPorfolio(uniqueStocks, totalCost));
+                _context3.next = 34;
                 break;
 
-              case 29:
-                _context3.prev = 29;
+              case 31:
+                _context3.prev = 31;
                 _context3.t0 = _context3["catch"](0);
                 console.log(_context3.t0);
 
-              case 32:
+              case 34:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 29]]);
+        }, _callee3, null, [[0, 31]]);
       }));
 
       return function (_x3) {
@@ -1272,12 +1281,14 @@ var gettingPortfolio = function gettingPortfolio() {
     case ADD_TO_PORTFOLIO:
       var newPortfolio = _objectSpread({}, state.portfolio);
 
-      if (newPortfolio[action.stock.ticker]) {
-        newPortfolio[action.stock.ticker].quantity += action.stock.quantity;
+      if (newPortfolio.stocks[action.stock.ticker]) {
+        newPortfolio.stocks[action.stock.ticker].quantity += action.stock.quantity;
       } else {
-        newPortfolio[action.stock.ticker] = action.stock;
+        newPortfolio.stocks[action.stock.ticker] = action.stock;
       }
 
+      var costToAdd = newPortfolio.stocks[action.stock.ticker].quantity * newPortfolio.stocks[action.stock.ticker].latestPrice;
+      newPortfolio.totalCost += costToAdd;
       return _objectSpread({}, state, {
         portfolio: newPortfolio
       });
@@ -1300,7 +1311,10 @@ var gettingPortfolio = function gettingPortfolio() {
 
     case GOT_PORTFOLIO:
       return _objectSpread({}, state, {
-        portfolio: action.stocks,
+        portfolio: {
+          stocks: action.stocks,
+          totalCost: action.totalCost
+        },
         loadingMoreStocks: '',
         grabbingPortfolio: false
       });
