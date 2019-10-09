@@ -190,7 +190,7 @@ export default function(state = defaultStocks, action) {
       return {
         ...state,
         loadingMoreStocks:
-          'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and try again',
+          'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and click refresh for updated portfolio',
         grabbingPortfolio: false,
       };
     case GOT_PORTFOLIO:

@@ -67,7 +67,8 @@ html {
 
 #signedOutNav {
   text-align: center;
-  margin: 10px;
+  margin-top: 50px;
+  margin-bottom: 10px;
 }
 
 #signedInNav {
@@ -88,8 +89,12 @@ html {
   margin-left: 50px;
 }
 
-.containerItem {
+.transactionContainer {
   display: inline-block;
+}
+
+.transactionContainerItem {
+  font-size: 20px;
 }
 
 .portfolioSectionContainer {
@@ -100,13 +105,13 @@ html {
 
 #portfolioContainer {
   width: 60%;
-  padding: 20px;
+  padding: 0px 20px 20px 0;
 }
 #stockPurchaseForm {
-  padding: 20px;
   margin-top: 50px;
   width: 40%;
   text-align: center;
+  padding: 0px 0 20px 20px;
 }
 
 #cashHeader {
@@ -124,4 +129,5 @@ html {
   width: 90%;
   justify-content: space-between;
   font-size: 25px;
+  margin-bottom: 10px;
 }

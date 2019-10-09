@@ -18,10 +18,10 @@ class Transactions extends Component {
         <div>
           <h1 className="sectionHeader">Transactions</h1>
         </div>
-        <div className="containerItem">
+        <div className="transactionContainer">
           {this.props.stocks.map(stock => {
             return (
-              <div key={stock.id}>
+              <div className="transactionContainerItem" key={stock.id}>
                 <strong>
                   BUY ({stock.ticker}) - {stock.quantity} shares @ ${
                     stock.priceAtPurchase

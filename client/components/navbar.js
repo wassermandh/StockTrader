@@ -6,12 +6,12 @@ import { logout, clearError } from '../store';
 
 const Navbar = ({ handleClick, clearError, isLoggedIn, name }) => (
   <div>
-    <div id="welcomeNav">
-      <h1>Welcome to your stock trading app, {name}!</h1>
-    </div>
     <nav>
       {isLoggedIn ? (
         <div id="signedInNav">
+          <div id="welcomeNav">
+            <h1>Welcome to your stock trading app, {name}!</h1>
+          </div>
           <a className="navItem" href="#" onClick={handleClick}>
             Logout
           </a>

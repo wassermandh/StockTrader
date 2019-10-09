@@ -287,11 +287,11 @@ var Navbar = function Navbar(_ref) {
       clearError = _ref.clearError,
       isLoggedIn = _ref.isLoggedIn,
       name = _ref.name;
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    id: "welcomeNav"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Welcome to your stock trading app, ", name, "!")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", null, isLoggedIn ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", null, isLoggedIn ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "signedInNav"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "welcomeNav"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Welcome to your stock trading app, ", name, "!")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "navItem",
     href: "#",
     onClick: handleClick
@@ -638,9 +638,10 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
         className: "sectionHeader"
       }, "Transactions")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "containerItem"
+        className: "transactionContainer"
       }, this.props.stocks.map(function (stock) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "transactionContainerItem",
           key: stock.id
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "BUY (", stock.ticker, ") - ", stock.quantity, " shares @ $", stock.priceAtPurchase, ' ', "each"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
       })));
@@ -1293,7 +1294,7 @@ var gettingPortfolio = function gettingPortfolio() {
 
     case PORTFOLIO_API_THROTTLE:
       return _objectSpread({}, state, {
-        loadingMoreStocks: 'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and try again',
+        loadingMoreStocks: 'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and click refresh for updated portfolio',
         grabbingPortfolio: false
       });
 
@@ -1452,7 +1453,7 @@ var auth = function auth(name, email, password, method) {
               case 9:
                 try {
                   dispatch(getUser(res.data));
-                  _history__WEBPACK_IMPORTED_MODULE_1__["default"].push('/home');
+                  _history__WEBPACK_IMPORTED_MODULE_1__["default"].push('/portfolio');
                 } catch (error) {
                   console.error(error);
                 }
