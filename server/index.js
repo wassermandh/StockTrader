@@ -6,7 +6,7 @@ const session = require('express-session');
 const passport = require('passport');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const sessionStore = new SequelizeStore({ db });
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const app = express();
 module.exports = app;
 
