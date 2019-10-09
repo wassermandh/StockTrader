@@ -18,6 +18,11 @@
   border-left: 1px solid black;
 }
 
+#portfolioVerticalLine {
+  border-left: 1px solid black;
+  margin-top: 50px;
+}
+
 .navItem {
   padding: 5px;
 }
@@ -36,7 +41,7 @@ html {
   flex-direction: column;
 }
 
-input {
+.authInput {
   width: 90%;
   margin: 10px;
   padding: 5px;
@@ -55,7 +60,7 @@ input {
   text-align: center;
 }
 
-button[type='submit'] {
+#authSubmit {
   width: 6em;
   height: 3em;
 }
@@ -85,4 +90,31 @@ button[type='submit'] {
 
 .containerItem {
   display: inline-block;
+}
+
+.portfolioSectionContainer {
+  display: flex;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+#portfolioContainer {
+  width: 60%;
+  padding: 20px;
+}
+#stockPurchaseForm {
+  padding: 20px;
+  margin-top: 50px;
+  width: 40%;
+  text-align: center;
+}
+
+#cashHeader {
+  text-align: center;
+}
+
+.stockPurchaseInput {
+  width: 100%;
+  height: 20px;
+  margin-bottom: 5px;
 }

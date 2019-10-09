@@ -150,6 +150,7 @@ var AuthForm = function AuthForm(props) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "name"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    className: "authInput",
     name: "userName",
     type: "text",
     placeholder: "name",
@@ -159,6 +160,7 @@ var AuthForm = function AuthForm(props) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "email"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    className: "authInput",
     name: "email",
     type: "text",
     required: true,
@@ -168,6 +170,7 @@ var AuthForm = function AuthForm(props) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "password"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    className: "authInput",
     name: "password",
     type: "password",
     placeholder: "password",
@@ -175,6 +178,7 @@ var AuthForm = function AuthForm(props) {
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "loginButton"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    id: "authSubmit",
     type: "submit"
   }, displayName)), error && error.response && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "error"
@@ -382,7 +386,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var i = 0;
 
 var Porfolio =
 /*#__PURE__*/
@@ -405,13 +408,25 @@ function (_Component) {
     value: function render() {
       var _this = this;
 
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Portfolio"), Object.keys(this.props.portfolio).length > 0 ? Object.keys(this.props.portfolio).map(function (stock) {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "portfolioSectionContainer"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "portfolioContainer"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        className: "sectionHeader"
+      }, "Portfolio"), Object.keys(this.props.portfolio).length > 0 ? Object.keys(this.props.portfolio).map(function (stock) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: stock
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", {
           className: _this.props.portfolio[stock].performance
         }, stock, " - ", _this.props.portfolio[stock].quantity), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, _this.props.portfolio[stock].quantity * _this.props.portfolio[stock].latestPrice));
-      }) : '', this.props.grabbingPortfolio ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Loading...") : '', this.props.loadingMoreStocks.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.props.loadingMoreStocks) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Cash - ", this.props.user.balance), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_stock_purchase_form__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
+      }) : '', this.props.grabbingPortfolio ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Loading...") : '', this.props.loadingMoreStocks.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.props.loadingMoreStocks) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        id: "portfolioVerticalLine"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "stockPurchaseForm"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+        id: "cashHeader"
+      }, "Cash - $", this.props.user.balance), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_stock_purchase_form__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
     }
   }]);
 
@@ -515,18 +530,23 @@ function (_Component) {
       console.log(this.state);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Stock Ticker:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "stockPurchaseInput",
+        placeholder: "stock ticker",
         type: "text",
         name: "ticker",
         onChange: this.handleChange,
         required: true
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Quantity", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "stockPurchaseInput",
+        placeholder: "quantity",
         type: "number",
         name: "quantity",
         min: "0",
         onChange: this.handleChange,
         required: true
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        id: "stockSubmit",
         type: "submit",
         value: "Submit"
       }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.error.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, this.props.error) : ''));

@@ -13,18 +13,31 @@ const AuthForm = props => {
         {name === 'signup' ? (
           <div className="formElement">
             <label htmlFor="name" />
-            <input name="userName" type="text" placeholder="name" required />
+            <input
+              className="authInput"
+              name="userName"
+              type="text"
+              placeholder="name"
+              required
+            />
           </div>
         ) : (
           ''
         )}
         <div className="formElement">
           <label htmlFor="email" />
-          <input name="email" type="text" required placeholder="email" />
+          <input
+            className="authInput"
+            name="email"
+            type="text"
+            required
+            placeholder="email"
+          />
         </div>
         <div className="formElement">
           <label htmlFor="password" />
           <input
+            className="authInput"
             name="password"
             type="password"
             placeholder="password"
@@ -32,7 +45,9 @@ const AuthForm = props => {
           />
         </div>
         <div id="loginButton">
-          <button type="submit">{displayName}</button>
+          <button id="authSubmit" type="submit">
+            {displayName}
+          </button>
         </div>
         {error &&
           error.response && <div id="error"> {error.response.data} </div>}

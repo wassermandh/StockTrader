@@ -4,8 +4,6 @@ import StockPurchaseForm from './stock_purchase_form';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-let i = 0;
-
 class Porfolio extends Component {
   constructor(props) {
     super(props);
@@ -15,9 +13,9 @@ class Porfolio extends Component {
   }
   render() {
     return (
-      <div>
-        <div>
-          <h1>Portfolio</h1>
+      <div className="portfolioSectionContainer">
+        <div id="portfolioContainer">
+          <h1 className="sectionHeader">Portfolio</h1>
           {Object.keys(this.props.portfolio).length > 0
             ? Object.keys(this.props.portfolio).map(stock => {
                 return (
@@ -40,8 +38,9 @@ class Porfolio extends Component {
             ''
           )}
         </div>
-        <div>
-          <h1>Cash - {this.props.user.balance}</h1>
+        <span id="portfolioVerticalLine" />
+        <div id="stockPurchaseForm">
+          <h3 id="cashHeader">Cash - ${this.props.user.balance}</h3>
           <StockPurchaseForm />
         </div>
       </div>

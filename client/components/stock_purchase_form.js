@@ -29,26 +29,28 @@ class StockPurchaseForm extends Component {
       <div>
         <div>
           <form onSubmit={this.handleSubmit}>
-            <label>
-              Stock Ticker:
+            <div>
               <input
+                className="stockPurchaseInput"
+                placeholder="stock ticker"
                 type="text"
                 name="ticker"
                 onChange={this.handleChange}
                 required
               />
-            </label>
-            <label>
-              Quantity
+            </div>
+            <div>
               <input
+                className="stockPurchaseInput"
+                placeholder="quantity"
                 type="number"
                 name="quantity"
                 min="0"
                 onChange={this.handleChange}
                 required
               />
-            </label>
-            <input type="submit" value="Submit" />
+            </div>
+            <input id="stockSubmit" type="submit" value="Submit" />
           </form>
         </div>
         <div>{this.props.error.length ? <p>{this.props.error}</p> : ''}</div>
