@@ -515,7 +515,7 @@ function (_Component) {
       console.log(this.state);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Stonk Ticker:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Stock Ticker:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "text",
         name: "ticker",
         onChange: this.handleChange,
@@ -614,7 +614,13 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Transactions")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.stocks.map(function (stock) {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "sectionContainer"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        className: "sectionHeader"
+      }, "Transactions")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "containerItem"
+      }, this.props.stocks.map(function (stock) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: stock.id
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "BUY (", stock.ticker, ") - ", stock.quantity, " shares @ $", stock.priceAtPurchase), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));

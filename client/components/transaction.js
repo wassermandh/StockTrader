@@ -14,11 +14,11 @@ class Transactions extends Component {
 
   render() {
     return (
-      <div>
+      <div className="sectionContainer">
         <div>
-          <h1>Transactions</h1>
+          <h1 className="sectionHeader">Transactions</h1>
         </div>
-        <div>
+        <div className="containerItem">
           {this.props.stocks.map(stock => {
             return (
               <div key={stock.id}>

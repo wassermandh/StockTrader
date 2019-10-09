@@ -65,7 +65,24 @@ button[type='submit'] {
   margin: 10px;
 }
 
+#signedInNav {
+  margin: 10px;
+}
+
 #error {
   text-align: center;
   color: red;
+}
+
+.sectionHeader {
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.sectionContainer {
+  margin-left: 50px;
+}
+
+.containerItem {
+  display: inline-block;
 }

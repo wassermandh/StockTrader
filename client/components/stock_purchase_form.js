@@ -30,7 +30,7 @@ class StockPurchaseForm extends Component {
         <div>
           <form onSubmit={this.handleSubmit}>
             <label>
-              Stonk Ticker:
+              Stock Ticker:
               <input
                 type="text"
                 name="ticker"
