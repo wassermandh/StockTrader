@@ -20,7 +20,6 @@ class Porfolio extends Component {
           </h1>
           {Object.keys(this.props.portfolio).length > 0
             ? Object.keys(this.props.portfolio).map(stock => {
-                // if (stock === 'totalCost') return '';
                 return (
                   <div
                     className={`portfolioStock ${
@@ -43,7 +42,7 @@ class Porfolio extends Component {
             : ''}
           {this.props.grabbingPortfolio ? <h3>Loading...</h3> : ''}
           {this.props.loadingMoreStocks.length ? (
-            <h3>{this.props.loadingMoreStocks}</h3>
+            <h3 id="throttlingError">ERROR: {this.props.loadingMoreStocks}</h3>
           ) : (
             ''
           )}

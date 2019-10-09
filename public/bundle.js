@@ -415,12 +415,13 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
         className: "sectionHeader"
       }, "Portfolio ($", this.props.portfolioTotal, ")"), Object.keys(this.props.portfolio).length > 0 ? Object.keys(this.props.portfolio).map(function (stock) {
-        // if (stock === 'totalCost') return '';
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "portfolioStock ".concat(_this.props.portfolio[stock].performance),
           key: stock
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, stock, " - ", _this.props.portfolio[stock].quantity, " shares")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Worth $", _this.props.portfolio[stock].quantity * _this.props.portfolio[stock].latestPrice));
-      }) : '', this.props.grabbingPortfolio ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Loading...") : '', this.props.loadingMoreStocks.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.props.loadingMoreStocks) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      }) : '', this.props.grabbingPortfolio ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Loading...") : '', this.props.loadingMoreStocks.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+        id: "throttlingError"
+      }, "ERROR: ", this.props.loadingMoreStocks) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         id: "portfolioVerticalLine"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "stockPurchaseForm"
@@ -550,7 +551,9 @@ function (_Component) {
         id: "stockSubmit",
         type: "submit",
         value: "Submit"
-      }, "Purchase"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.error.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, this.props.error) : ''));
+      }, "Purchase"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.error.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        id: "stockPurchaseError"
+      }, this.props.error) : ''));
     }
   }]);
 
@@ -45135,7 +45138,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, __RouterContext, generatePath, matchPath, useHistory, useLocation, useParams, useRouteMatch, withRouter */
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, __RouterContext, generatePath, matchPath, useHistory, useLocation, useParams, useRouteMatch, withRouter, BrowserRouter, HashRouter, Link, NavLink */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

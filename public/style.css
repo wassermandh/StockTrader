@@ -131,3 +131,11 @@ html {
   font-size: 25px;
   margin-bottom: 10px;
 }
+
+#throttlingError {
+  color: red;
+}
+
+#stockPurchaseError {
+  color: red;
+}

@@ -55,7 +55,13 @@ class StockPurchaseForm extends Component {
             </button>
           </form>
         </div>
-        <div>{this.props.error.length ? <p>{this.props.error}</p> : ''}</div>
+        <div>
+          {this.props.error.length ? (
+            <p id="stockPurchaseError">{this.props.error}</p>
+          ) : (
+            ''
+          )}
+        </div>
       </div>
     );
   }
