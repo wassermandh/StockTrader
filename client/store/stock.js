@@ -16,7 +16,7 @@ const IS_PURCHASING = 'IS_PURCHASING';
 const defaultStocks = {
   stocks: [],
   error: '',
-  loadingMoreStocks: '',
+  portfolioThrottle: '',
   portfolio: { totalCost: 0, stocks: [] },
   grabbingPortfolio: true,
   purchasing: '',
@@ -203,7 +203,7 @@ export default function(state = defaultStocks, action) {
         stocks: [...state.stocks, action.stock],
         error: '',
         purchasing: 'Successfully Purchased!',
-        loadingMoreStocks: '',
+        portfolioThrottle: '',
         portfolioRefreshThrottle: '',
       };
     case INCORRECT_TICKER:
@@ -230,15 +230,15 @@ export default function(state = defaultStocks, action) {
     case PORTFOLIO_API_THROTTLE:
       return {
         ...state,
-        loadingMoreStocks:
-          'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and click refresh for updated portfolio',
+        portfolioThrottle:
+          'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and then refresh for updated portfolio',
         grabbingPortfolio: false,
       };
     case GOT_PORTFOLIO:
       return {
         ...state,
         portfolio: { stocks: action.stocks, totalCost: action.totalCost },
-        loadingMoreStocks: '',
+        portfolioThrottle: '',
         grabbingPortfolio: false,
       };
     case TOO_MANY_CALLS:

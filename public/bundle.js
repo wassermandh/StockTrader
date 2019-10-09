@@ -296,12 +296,12 @@ var Navbar = function Navbar(_ref) {
     href: "#",
     onClick: handleClick
   }, "Logout"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "verticalLine"
+    className: "navbarVerticalLine"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     className: "navItem",
     to: "/portfolio"
   }, "Portfolio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "verticalLine"
+    className: "navbarVerticalLine"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     className: "navItem",
     to: "/transactions"
@@ -312,7 +312,7 @@ var Navbar = function Navbar(_ref) {
     className: "navItem",
     to: "/login"
   }, "Login"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "verticalLine"
+    className: "navbarVerticalLine"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     onClick: clearError,
     className: "navItem",
@@ -409,7 +409,7 @@ function (_Component) {
       var _this = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "portfolioSectionContainer"
+        className: "portfolioComponentContainer"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "portfolioContainer"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
@@ -419,14 +419,14 @@ function (_Component) {
           className: "portfolioStock ".concat(_this.props.portfolio[stock].performance),
           key: stock
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, stock, " - ", _this.props.portfolio[stock].quantity, " shares")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Worth $", _this.props.portfolio[stock].quantity * _this.props.portfolio[stock].latestPrice));
-      }) : '', this.props.grabbingPortfolio ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Loading...") : '', this.props.loadingMoreStocks.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+      }) : '', this.props.grabbingPortfolio ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Loading...") : '', this.props.portfolioThrottle.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
         id: "throttlingError"
-      }, "ERROR: ", this.props.loadingMoreStocks) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      }, "ERROR: ", this.props.portfolioThrottle) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         id: "portfolioVerticalLine"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "stockPurchaseForm"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
-        id: "cashHeader"
+        id: "balanceHeader"
       }, "Balance Remaining - $", this.props.user.balance), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_stock_purchase_form__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
     }
   }]);
@@ -439,7 +439,7 @@ var mapStateToProps = function mapStateToProps(state) {
     user: state.user,
     portfolio: state.stock.portfolio.stocks,
     portfolioTotal: state.stock.portfolio.totalCost,
-    loadingMoreStocks: state.stock.loadingMoreStocks,
+    portfolioThrottle: state.stock.portfolioThrottle,
     grabbingPortfolio: state.stock.grabbingPortfolio,
     stocks: state.stock.stocks
   };
@@ -642,14 +642,14 @@ function (_Component) {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "sectionContainer"
+        className: "transactionContainer"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
         className: "sectionHeader"
       }, "Transactions")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "transactionContainer"
+        className: "transactionItemContainer"
       }, this.props.stocks.map(function (stock) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "transactionContainerItem",
+          className: "transactionItem",
           key: stock.id
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "BUY (", stock.ticker, ") - ", stock.quantity, " shares @ $", stock.priceAtPurchase, ' ', "each"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
       })));
@@ -980,7 +980,7 @@ var IS_PURCHASING = 'IS_PURCHASING';
 var defaultStocks = {
   stocks: [],
   error: '',
-  loadingMoreStocks: '',
+  portfolioThrottle: '',
   portfolio: {
     totalCost: 0,
     stocks: []
@@ -1342,7 +1342,7 @@ var gettingPortfolio = function gettingPortfolio() {
         stocks: [].concat(_toConsumableArray(state.stocks), [action.stock]),
         error: '',
         purchasing: 'Successfully Purchased!',
-        loadingMoreStocks: '',
+        portfolioThrottle: '',
         portfolioRefreshThrottle: ''
       });
 
@@ -1380,7 +1380,7 @@ var gettingPortfolio = function gettingPortfolio() {
 
     case PORTFOLIO_API_THROTTLE:
       return _objectSpread({}, state, {
-        loadingMoreStocks: 'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and click refresh for updated portfolio',
+        portfolioThrottle: 'Sorry, this API has limitations... only five calls can be made per minute... please wait one minute and then refresh for updated portfolio',
         grabbingPortfolio: false
       });
 
@@ -1390,7 +1390,7 @@ var gettingPortfolio = function gettingPortfolio() {
           stocks: action.stocks,
           totalCost: action.totalCost
         },
-        loadingMoreStocks: '',
+        portfolioThrottle: '',
         grabbingPortfolio: false
       });
 

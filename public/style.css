@@ -14,7 +14,7 @@
   text-align: center;
 }
 
-.verticalLine {
+.navbarVerticalLine {
   border-left: 1px solid black;
 }
 
@@ -85,19 +85,19 @@ html {
   margin-bottom: 30px;
 }
 
-.sectionContainer {
+.transactionContainer {
   margin-left: 50px;
 }
 
-.transactionContainer {
+.transactionItemContainer {
   display: inline-block;
 }
 
-.transactionContainerItem {
+.transactionItem {
   font-size: 20px;
 }
 
-.portfolioSectionContainer {
+.portfolioComponentContainer {
   display: flex;
   margin-left: 50px;
   margin-right: 50px;
@@ -107,6 +107,7 @@ html {
   width: 60%;
   padding: 0px 20px 20px 0;
 }
+
 #stockPurchaseForm {
   margin-top: 50px;
   width: 40%;
@@ -114,7 +115,7 @@ html {
   padding: 0px 0 20px 20px;
 }
 
-#cashHeader {
+#balanceHeader {
   text-align: center;
 }
 

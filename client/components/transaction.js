@@ -14,14 +14,14 @@ class Transactions extends Component {
 
   render() {
     return (
-      <div className="sectionContainer">
+      <div className="transactionContainer">
         <div>
           <h1 className="sectionHeader">Transactions</h1>
         </div>
-        <div className="transactionContainer">
+        <div className="transactionItemContainer">
           {this.props.stocks.map(stock => {
             return (
-              <div className="transactionContainerItem" key={stock.id}>
+              <div className="transactionItem" key={stock.id}>
                 <strong>
                   BUY ({stock.ticker}) - {stock.quantity} shares @ ${
                     stock.priceAtPurchase

@@ -13,7 +13,7 @@ class Porfolio extends Component {
   }
   render() {
     return (
-      <div className="portfolioSectionContainer">
+      <div className="portfolioComponentContainer">
         <div id="portfolioContainer">
           <h1 className="sectionHeader">
             Portfolio (${this.props.portfolioTotal})
@@ -41,15 +41,15 @@ class Porfolio extends Component {
               })
             : ''}
           {this.props.grabbingPortfolio ? <h3>Loading...</h3> : ''}
-          {this.props.loadingMoreStocks.length ? (
-            <h3 id="throttlingError">ERROR: {this.props.loadingMoreStocks}</h3>
+          {this.props.portfolioThrottle.length ? (
+            <h3 id="throttlingError">ERROR: {this.props.portfolioThrottle}</h3>
           ) : (
             ''
           )}
         </div>
         <span id="portfolioVerticalLine" />
         <div id="stockPurchaseForm">
-          <h3 id="cashHeader">
+          <h3 id="balanceHeader">
             Balance Remaining - ${this.props.user.balance}
           </h3>
           <StockPurchaseForm />
@@ -64,7 +64,7 @@ const mapStateToProps = state => {
     user: state.user,
     portfolio: state.stock.portfolio.stocks,
     portfolioTotal: state.stock.portfolio.totalCost,
-    loadingMoreStocks: state.stock.loadingMoreStocks,
+    portfolioThrottle: state.stock.portfolioThrottle,
     grabbingPortfolio: state.stock.grabbingPortfolio,
     stocks: state.stock.stocks,
   };

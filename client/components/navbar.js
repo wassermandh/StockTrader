@@ -15,12 +15,12 @@ const Navbar = ({ handleClick, clearError, isLoggedIn, name }) => (
           <a className="navItem" href="#" onClick={handleClick}>
             Logout
           </a>
-          <span className="verticalLine" />
+          <span className="navbarVerticalLine" />
           <span>
             <Link className="navItem" to="/portfolio">
               Portfolio
             </Link>
-            <span className="verticalLine" />
+            <span className="navbarVerticalLine" />
             <Link className="navItem" to="/transactions">
               Transactions
             </Link>
@@ -31,7 +31,7 @@ const Navbar = ({ handleClick, clearError, isLoggedIn, name }) => (
           <Link onClick={clearError} className="navItem" to="/login">
             Login
           </Link>
-          <span className="verticalLine" />
+          <span className="navbarVerticalLine" />
           <Link onClick={clearError} className="navItem" to="/signup">
             Sign Up
           </Link>
