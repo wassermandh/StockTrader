@@ -18,10 +18,6 @@ const User = db.define('user', {
     validate: {
       min: 0,
     },
-    // get() {
-    //   const balance = this.getDataValue('balance');
-    //   return balance / 100;
-    // },
   },
   password: {
     type: Sequelize.STRING,

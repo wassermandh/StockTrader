@@ -1230,25 +1230,7 @@ var gettingTransactions = function gettingTransactions() {
       };
     }()
   );
-}; // export const addingToPortfolio = stock => async dispatch => {
-//   try {
-//     console.log(stock);
-//     let stockToAdd = {};
-//     const { data } = await axios.get(alphavantageCall(stock.ticker));
-//     if (data.Note) {
-//       dispatch(tooManyCalls());
-//     }
-//     const ticker = data['Global Quote']['01. symbol'];
-//     const latestPrice = Number(data['Global Quote']['05. price']);
-//     const openPrice = Number(data['Global Quote']['02. open']);
-//     const trend = latestPrice - openPrice;
-//     stockToAdd[ticker].latestPrice = latestPrice;
-//     stockToAdd[ticker].openPrice = openPrice;
-//     stockToAdd[ticker].trend = trend;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+};
 
 var trendDirection = function trendDirection(trend) {
   if (trend < 0) {
