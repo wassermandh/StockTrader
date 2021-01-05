@@ -24,7 +24,7 @@
     "url": "https://github.com/wassermandh/StockTrader/issues"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "compression": "^1.7.3",
     "connect-session-sequelize": "^6.0.0",
     "express": "^4.16.4",
